@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SkillSync
 
-## Getting Started
+AI-powered recruitment platform for small agencies — NLP resume scoring, automated candidate status updates, and bulk resume processing.
 
-First, run the development server:
+> **Status:** Pre-launch. Waitlist open. MVP in active development.
+
+---
+
+## What It Does
+
+Small recruiting agencies (2–5 people) run hiring on spreadsheets and manual email. SkillSync replaces that workflow with:
+
+- **AI Resume Scoring** — transformer embeddings + cosine similarity rank candidates by fit, not keywords
+- **Bulk Resume Upload** — upload 50+ PDFs at once, get a ranked shortlist automatically
+- **Automated Status Engine** — candidates receive email updates at every pipeline stage (applied → shortlisted → decided). No more ghosting.
+- **Candidate Score Tool** — paste any job description, get your resume scored against it instantly
+- **CSV Pipeline Import** — migrate your existing spreadsheet in one upload
+
+**Free tier:** 50 scored applications/month, all features included. No credit card.
+
+---
+
+## Tech Stack
+
+| Layer | Tool |
+|-------|------|
+| Framework | Next.js 16 (App Router) |
+| Styling | Tailwind CSS v4 |
+| Auth | Clerk |
+| Database | Supabase (Postgres) |
+| File Storage | Supabase Storage |
+| AI/NLP | Custom transformer embeddings + cosine similarity (Python, Render) |
+| Email | Resend |
+| Queue | Inngest (async bulk processing) |
+| Rate Limiting | Upstash Redis |
+| Deploy | Vercel |
+
+---
+
+## Local Development
+
+### Prerequisites
+
+- Node.js 18+
+- A [Supabase](https://supabase.com) project
+- A [Clerk](https://clerk.com) application
+
+### Setup
+
+```bash
+git clone https://github.com/khizar925/SkillSync.git
+cd SkillSync
+npm install
+cp .env.example .env.local
+```
+
+Fill in `.env.local`:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+
+NLP_BACKEND_URL=
+
+RESEND_API_KEY=
+
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```
+app/
+  api/waitlist/         ← waitlist signup endpoint
+  privacy/              ← privacy policy page
+  robots.ts             ← SEO robots.txt
+  sitemap.ts            ← SEO sitemap.xml
+components/sections/    ← landing page sections
+docs/
+  ROADMAP.md            ← 16-month product roadmap
+  TODO.md               ← pre-launch checklist
+  TechStackDecision.md  ← architecture decisions
+lib/
+  supabase.ts           ← Supabase client
+scripts/
+  commit.ps1            ← one-command commit + push helper
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Roadmap
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the full 3-phase, 16-month plan.
 
-## Deploy on Vercel
+| Phase | Timeline | Theme |
+|-------|----------|-------|
+| 1 | M0–4 | Earn trust — status engine, NLP scoring, free tier |
+| 2 | M5–9 | Build moat — bot detection, explainability, paid tier |
+| 3 | M10–16 | Scale — network effects, integrations, compliance |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+Private. All rights reserved.
