@@ -45,12 +45,11 @@ export default function Footer() {
                 </svg>
               </div>
               <span className="font-bold text-lg text-gray-900 tracking-tight">
-                Skill<span className="text-emerald-600">Sync</span>
+                Smart<span className="text-emerald-600">Hire</span>
               </span>
             </a>
             <p className="text-gray-500 text-sm leading-relaxed max-w-[200px]">
-              AI-powered recruitment that syncs the right skills with the right
-              opportunities.
+              AI-powered recruitment for small agencies. Hire smarter, faster.
             </p>
 
 
@@ -79,7 +78,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-gray-200 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-gray-400 text-xs">
-            &copy; {new Date().getFullYear()} SkillSync Technologies. All rights reserved.
+            &copy; {new Date().getFullYear()} SmartHire Technologies. All rights reserved.
           </p>
           <p className="text-gray-400 text-xs">
             Built for better hiring, everywhere.

@@ -38,7 +38,7 @@ export default function Navbar() {
               </svg>
             </div>
             <span className="font-bold text-lg tracking-tight text-gray-900">
-              Skill<span className="text-green-600">Sync</span>
+              Smart<span className="text-green-600">Hire</span>
             </span>
           </a>
 

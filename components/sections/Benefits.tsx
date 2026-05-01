@@ -54,7 +54,7 @@ export default function Benefits() {
           </h2>
           <p className="text-gray-500 text-[17px] leading-relaxed max-w-[52ch] mx-auto">
             Whether you&apos;re filling a role or looking for your next opportunity,
-            SkillSync is designed to give you the advantage.
+            SmartHire is designed to give you the advantage.
           </p>
         </div>
 

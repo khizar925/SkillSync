@@ -44,7 +44,7 @@ const steps = [
     ring:   "border-sky-200 bg-sky-50",
     dot:    "bg-sky-500",
     label:  "Track & Decide",
-    body:   "Both parties get real-time status updates. Schedule interviews, exchange feedback, and close offers — all within SkillSync.",
+    body:   "Both parties get real-time status updates. Schedule interviews, exchange feedback, and close offers — all within SmartHire.",
     bullets: [
       "Live status for candidates",
       "In-platform interview scheduling",

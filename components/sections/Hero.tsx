@@ -39,8 +39,8 @@ export default function Hero() {
               className="text-[2.25rem] sm:text-5xl lg:text-[64px] font-bold tracking-[-0.03em] leading-[1.06] text-gray-900 animate-fade-up"
               style={{ animationDelay: "0.08s" }}
             >
-              Sync Skills with{" "}
-              <span className="gradient-text">Opportunities</span>
+              Hire Smarter with{" "}
+              <span className="gradient-text">AI</span>
               {", "}
               Powered by AI
             </h1>

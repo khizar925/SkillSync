@@ -1,4 +1,4 @@
-# SkillSync
+# SmartHire
 
 AI-powered recruitment platform for small agencies — NLP resume scoring, automated candidate status updates, and bulk resume processing.
 
@@ -8,7 +8,7 @@ AI-powered recruitment platform for small agencies — NLP resume scoring, autom
 
 ## What It Does
 
-Small recruiting agencies (2–5 people) run hiring on spreadsheets and manual email. SkillSync replaces that workflow with:
+Small recruiting agencies (2–5 people) run hiring on spreadsheets and manual email. SmartHire replaces that workflow with:
 
 - **AI Resume Scoring** — transformer embeddings + cosine similarity rank candidates by fit, not keywords
 - **Bulk Resume Upload** — upload 50+ PDFs at once, get a ranked shortlist automatically
@@ -48,8 +48,8 @@ Small recruiting agencies (2–5 people) run hiring on spreadsheets and manual e
 ### Setup
 
 ```bash
-git clone https://github.com/khizar925/SkillSync.git
-cd SkillSync
+git clone https://github.com/khizar925/SmartHire.git
+cd Smart-Hire
 npm install
 cp .env.example .env.local
 ```

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — SkillSync",
-  description: "How SkillSync collects, uses, and protects your personal information.",
+  title: "Privacy Policy — SmartHire",
+  description: "How SmartHire collects, uses, and protects your personal information.",
 };
 
 const sections = [
@@ -13,7 +13,7 @@ const sections = [
   },
   {
     title: "How We Use Your Information",
-    body: "Your email and role are used solely to notify you when SkillSync launches and to send relevant product updates. We do not use your data for advertising or sell it to third parties.",
+    body: "Your email and role are used solely to notify you when SmartHire launches and to send relevant product updates. We do not use your data for advertising or sell it to third parties.",
   },
   {
     title: "Data Storage",
@@ -25,7 +25,7 @@ const sections = [
   },
   {
     title: "Data Retention",
-    body: "We retain your waitlist data until SkillSync launches and you are onboarded, or until you request deletion — whichever comes first.",
+    body: "We retain your waitlist data until SmartHire launches and you are onboarded, or until you request deletion — whichever comes first.",
   },
   {
     title: "Your Rights",
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
               </svg>
             </div>
             <span className="font-bold text-gray-900 tracking-tight">
-              Skill<span className="text-emerald-600">Sync</span>
+              Smart<span className="text-emerald-600">Hire</span>
             </span>
           </Link>
           <Link
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
         </div>
 
         <p className="text-gray-600 leading-relaxed mb-12 text-[15px]">
-          SkillSync is a waitlist-stage product. This policy explains what data we
+          SmartHire is a waitlist-stage product. This policy explains what data we
           collect when you join our waitlist and how we handle it. We believe in
           plain English, so there is no legal jargon here.
         </p>
