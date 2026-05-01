@@ -62,7 +62,7 @@ export default function Hero() {
               style={{ animationDelay: "0.28s" }}
             >
               <a
-                href="#waitlist"
+                href="#features"
                 className="inline-flex items-center justify-between gap-3 pl-6 pr-2 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base glow-btn"
               >
                 Start Hiring Smarter
@@ -100,7 +100,7 @@ export default function Hero() {
               </div>
               <p className="text-gray-500 text-sm leading-snug">
                 <span className="text-gray-900 font-semibold">500+</span>{" "}
-                companies &amp; candidates on the waitlist
+                companies &amp; candidates ready to join
               </p>
             </div>
           </div>

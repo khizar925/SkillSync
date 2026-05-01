@@ -6,7 +6,6 @@ const links = [
   { label: "Features",     href: "#features"     },
   { label: "How It Works", href: "#how-it-works" },
   { label: "Benefits",     href: "#benefits"     },
-  { label: "Waitlist",     href: "#waitlist"     },
 ];
 
 export default function Navbar() {
@@ -58,10 +57,10 @@ export default function Navbar() {
 
           {/* CTA — button-in-button pattern */}
           <a
-            href="#waitlist"
+            href="#features"
             className="hidden md:inline-flex items-center gap-2.5 pl-4 pr-1.5 py-1.5 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-bold glow-btn"
           >
-            Join Waitlist
+            Get Started
             <span className="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0">
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
                 <path d="M2.5 6.5H10.5M7.5 3.5L10.5 6.5L7.5 9.5"
@@ -101,11 +100,11 @@ export default function Navbar() {
               ))}
             </nav>
             <a
-              href="#waitlist"
+              href="#features"
               className="flex items-center justify-center gap-2 py-3 rounded-xl bg-green-600 text-white text-sm font-bold"
               onClick={() => setOpen(false)}
             >
-              Join Waitlist
+              Get Started
             </a>
           </div>
         )}

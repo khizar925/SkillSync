@@ -32,7 +32,7 @@ export default function FinalCTA() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {/* Primary — button-in-button */}
               <a
-                href="#waitlist"
+                href="#features"
                 className="inline-flex items-center justify-between gap-3 pl-6 pr-2 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base glow-btn"
               >
                 I&apos;m a Recruiter
@@ -45,7 +45,7 @@ export default function FinalCTA() {
 
               {/* Secondary */}
               <a
-                href="#waitlist"
+                href="#features"
                 className="inline-flex items-center justify-between gap-3 pl-6 pr-2 py-2 rounded-xl border border-gray-300 hover:border-emerald-300 hover:bg-emerald-50 text-gray-800 font-bold text-base transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 active:scale-[0.98]"
               >
                 I&apos;m a Candidate

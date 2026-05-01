@@ -87,7 +87,7 @@ export default function Benefits() {
                 </ul>
 
                 <a
-                  href="#waitlist"
+                  href="#features"
                   className="inline-flex items-center justify-between gap-3 pl-5 pr-1.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm mt-auto glow-btn self-start"
                 >
                   Start Hiring Smarter
@@ -126,7 +126,7 @@ export default function Benefits() {
                 </ul>
 
                 <a
-                  href="#waitlist"
+                  href="#features"
                   className="inline-flex items-center justify-between gap-3 pl-5 pr-1.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm mt-auto glow-btn self-start"
                   style={{ transition: "box-shadow 0.25s cubic-bezier(0.32,0.72,0,1), transform 0.2s cubic-bezier(0.32,0.72,0,1)" }}
                 >
