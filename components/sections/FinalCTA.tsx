@@ -20,8 +20,8 @@ export default function FinalCTA() {
             </p>
 
             <h2 className="text-4xl sm:text-5xl lg:text-[60px] font-bold tracking-[-0.03em] text-gray-900 mb-6 leading-[1.04]">
-              Ready to Sync Your{" "}
-              <span className="gradient-text">Hiring?</span>
+              Ready to Hire{" "}
+              <span className="gradient-text">Smarter?</span>
             </h2>
 
             <p className="text-gray-500 text-[17px] leading-relaxed max-w-[50ch] mx-auto mb-10">
@@ -32,7 +32,7 @@ export default function FinalCTA() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {/* Primary — button-in-button */}
               <a
-                href="#features"
+                href="/sign-in"
                 className="inline-flex items-center justify-between gap-3 pl-6 pr-2 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base glow-btn"
               >
                 I&apos;m a Recruiter
@@ -45,7 +45,7 @@ export default function FinalCTA() {
 
               {/* Secondary */}
               <a
-                href="#features"
+                href="/sign-in"
                 className="inline-flex items-center justify-between gap-3 pl-6 pr-2 py-2 rounded-xl border border-gray-300 hover:border-emerald-300 hover:bg-emerald-50 text-gray-800 font-bold text-base transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 active:scale-[0.98]"
               >
                 I&apos;m a Candidate

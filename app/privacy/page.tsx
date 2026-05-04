@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import PublicPageLayout from "@/components/PublicPageLayout";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — SmartHire",
@@ -9,15 +9,15 @@ export const metadata: Metadata = {
 const sections = [
   {
     title: "Information We Collect",
-    body: "When you join our waitlist, we collect your email address and your role (recruiter or candidate). We collect no other personal data.",
+    body: "When you use SmartHire, we collect your email address, name, and role (recruiter or candidate). Recruiters may also provide job listings. Candidates may upload resumes (PDF or DOCX format). We also collect application data and AI resume scoring results generated through normal use of the platform.",
   },
   {
     title: "How We Use Your Information",
-    body: "Your email and role are used solely to notify you when SmartHire launches and to send relevant product updates. We do not use your data for advertising or sell it to third parties.",
+    body: "Your information is used to provide the SmartHire recruitment platform, including AI-powered resume scoring, automated status emails to applicants, and platform analytics to improve the product. We do not use your data for advertising or sell it to third parties.",
   },
   {
     title: "Data Storage",
-    body: "Your data is stored securely in a cloud database (Supabase) hosted on AWS infrastructure in the EU/US region. Data is encrypted at rest and in transit.",
+    body: "Your data is stored securely in Supabase, hosted on AWS infrastructure. Data is encrypted at rest and in transit. Uploaded resumes are stored in Supabase Storage with per-user private buckets, ensuring files are only accessible to authorized parties.",
   },
   {
     title: "Data Sharing",
@@ -25,7 +25,7 @@ const sections = [
   },
   {
     title: "Data Retention",
-    body: "We retain your waitlist data until SmartHire launches and you are onboarded, or until you request deletion — whichever comes first.",
+    body: "We retain your data for as long as your account is active. You may request deletion of your account and all associated data at any time from your account settings. We will process deletion requests promptly.",
   },
   {
     title: "Your Rights",
@@ -33,43 +33,17 @@ const sections = [
   },
   {
     title: "Cookies",
-    body: "This website does not use tracking cookies or analytics cookies. No third-party cookies are set.",
+    body: "SmartHire uses Clerk authentication cookies to manage your login session. We also use Vercel Analytics, which collects only aggregate, anonymized usage data — no personal identifiers. We do not set any third-party tracking cookies.",
   },
   {
     title: "Changes to This Policy",
-    body: "If we make material changes to this policy, we will notify waitlist members by email before the changes take effect.",
+    body: "If we make material changes to this policy, we will notify users by email before the changes take effect.",
   },
 ];
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="border-b border-gray-100">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
-                <path
-                  d="M8 2L5 6H2L4.5 8.5L3.5 12L8 9.5L12.5 12L11.5 8.5L14 6H11L8 2Z"
-                  fill="white" stroke="white" strokeWidth="0.5" strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <span className="font-bold text-gray-900 tracking-tight">
-              Smart<span className="text-emerald-600">Hire</span>
-            </span>
-          </Link>
-          <Link
-            href="/"
-            className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            ← Back to home
-          </Link>
-        </div>
-      </div>
-
-      {/* Content */}
+    <PublicPageLayout>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
         <div className="mb-12">
           <p className="text-emerald-600 text-sm font-semibold uppercase tracking-widest mb-3">
@@ -85,9 +59,9 @@ export default function PrivacyPage() {
         </div>
 
         <p className="text-gray-600 leading-relaxed mb-12 text-[15px]">
-          SmartHire is a waitlist-stage product. This policy explains what data we
-          collect when you join our waitlist and how we handle it. We believe in
-          plain English, so there is no legal jargon here.
+          SmartHire is an AI-powered recruitment platform. This policy explains
+          what data we collect when you use our platform and how we handle it.
+          We believe in plain English, so there is no legal jargon here.
         </p>
 
         <div className="space-y-10">
@@ -101,6 +75,6 @@ export default function PrivacyPage() {
           ))}
         </div>
       </div>
-    </main>
+    </PublicPageLayout>
   );
 }

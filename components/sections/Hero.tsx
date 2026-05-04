@@ -39,7 +39,7 @@ export default function Hero() {
               className="text-[2.25rem] sm:text-5xl lg:text-[64px] font-bold tracking-[-0.03em] leading-[1.06] text-gray-900 animate-fade-up"
               style={{ animationDelay: "0.08s" }}
             >
-              Hire Smarter with{" "}
+              Hire Smart with{" "}
               <span className="gradient-text">AI</span>
               {", "}
               Powered by AI
@@ -86,22 +86,6 @@ export default function Hero() {
               className="flex flex-wrap items-center gap-x-3 gap-y-2 animate-fade-up"
               style={{ animationDelay: "0.38s" }}
             >
-              <div className="flex -space-x-2.5 flex-shrink-0">
-                {avatarLetters.map((l, i) => (
-                  <div
-                    key={i}
-                    className={`w-8 h-8 rounded-full border-2 border-white ${avatarColors[i]} flex items-center justify-center text-white text-xs font-bold`}
-                    style={{ zIndex: 5 - i }}
-                    aria-hidden
-                  >
-                    {l}
-                  </div>
-                ))}
-              </div>
-              <p className="text-gray-500 text-sm leading-snug">
-                <span className="text-gray-900 font-semibold">500+</span>{" "}
-                companies &amp; candidates ready to join
-              </p>
             </div>
           </div>
 

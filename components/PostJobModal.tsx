@@ -1,0 +1,500 @@
+// components/PostJobModal.tsx
+'use client';
+
+import { useState, useEffect } from 'react';
+import { X, Loader2, AlertCircle, BrainCircuit } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { Button } from './Button';
+import { queryKeys } from '@/lib/query-keys';
+
+interface PostJobModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onJobposted: () => void;
+}
+
+export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps) {
+  const [mounted, setMounted] = useState(false);
+  const [formData, setFormData] = useState({
+    jobTitle: '',
+    companyName: '',
+    location: '',
+    employmentType: '',
+    experienceLevel: '',
+    skills: '',
+    jobDescription: '',
+  });
+  const [submittingAs, setSubmittingAs] = useState<'post' | 'draft' | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [errorDetails, setErrorDetails] = useState<string[]>([]);
+  const [createdJobId, setCreatedJobId] = useState<string | null>(null);
+  const publicLink = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '');
+  const [publicLinkStatus, setPublicLinkStatus] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const qc = useQueryClient();
+
+  useEffect(() => {
+    setMounted(true);
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  function formatJobDescriptionToMarkdown(content: string): string {
+    if (!content || typeof content !== 'string') return '';
+
+    content = content.trim().replace(/\r\n/g, '\n').replace(/\t/g, '    ');
+
+    const hasMarkdownHeaders = /^#{1,6}\s+.+$/m.test(content);
+    const hasMarkdownLists = /^\s*[-*+]\s+.+$/m.test(content);
+    const hasMarkdownBold = /\*\*.+?\*\*/.test(content);
+
+    if (hasMarkdownHeaders || (hasMarkdownLists && hasMarkdownBold)) {
+      return content
+        .replace(/([^\n])(#{1,6}\s+)/g, '$1\n\n$2')
+        .replace(/(#{1,6}\s+.+?)(\n)([^\n#])/g, '$1\n\n$3')
+        .replace(/([^\n\s*-])(\n[-*+]\s+)/g, '$1\n\n$2')
+        .replace(/[ \t]+$/gm, '')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim() + '\n';
+    }
+
+    const lines = content.split('\n');
+    const result: string[] = [];
+    let inList = false;
+    let previousWasBlank = false;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      const nextLine = i < lines.length - 1 ? lines[i + 1].trim() : '';
+
+      if (line === '') {
+        if (!previousWasBlank && result.length > 0) {
+          result.push('');
+          previousWasBlank = true;
+        }
+        inList = false;
+        continue;
+      }
+
+      previousWasBlank = false;
+
+      const isShort = line.length < 80;
+      const hasNoEndPunctuation = !/[.!?]$/.test(line);
+      const isAllCaps = line === line.toUpperCase() && /[A-Z]/.test(line);
+      const endsWithColon = line.endsWith(':');
+      const matchesHeaderPattern = /^(Overview|Summary|Description|Responsibilities|Requirements|Qualifications|Skills|Benefits|About|Role|Position|Duties|Experience|Education|Salary|Career|Tools|Technologies|Key|Primary|Core|Technical|Soft|Preferred|Required)/i.test(line);
+
+      const isHeader = (matchesHeaderPattern && isShort) || (isAllCaps && isShort && hasNoEndPunctuation) || (endsWithColon && isShort);
+
+      if (isHeader) {
+        if (inList) {
+          result.push('');
+          inList = false;
+        }
+
+        const level = /^(Overview|Key Responsibilities|Requirements|Qualifications|Skills|About|Benefits|Salary|Career Path|Tools|Technologies)/i.test(line) ? 2 : 3;
+        const headerText = line.replace(/:+$/, '').trim();
+
+        if (result.length > 0 && result[result.length - 1] !== '') result.push('');
+        result.push(`${'#'.repeat(level)} ${headerText}`);
+        result.push('');
+        continue;
+      }
+
+      const isList = /^[-•*+‣▸▹►▪▫]\s+/.test(line) || /^\d+\.\s+/.test(line) || /^[a-z]\.\s+/i.test(line) || (/^(\s{2,}|\t)/.test(line) && line.length < 150);
+
+      if (isList) {
+        if (!inList && result.length > 0 && result[result.length - 1] !== '') result.push('');
+        inList = true;
+        const listItem = line.replace(/^[-•*+‣▸▹►▪▫]\s+/, '').replace(/^\d+\.\s+/, '').replace(/^[a-z]\.\s+/i, '').replace(/^\s+/, '').trim();
+        result.push(`- ${listItem}`);
+        continue;
+      }
+
+      if (inList) {
+        result.push('');
+        inList = false;
+      }
+
+      const formattedLine = line.includes('**') ? line : line.replace(/^([A-Z][a-zA-Z\s&]+):/g, '**$1**:');
+      result.push(formattedLine);
+    }
+
+    return result.join('\n').trim() + '\n';
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing
+    if (error) {
+      setError(null);
+      setErrorDetails([]);
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({ jobTitle: '', companyName: '', location: '', employmentType: '', experienceLevel: '', skills: '', jobDescription: '' });
+    setCreatedJobId(null);
+    setPublicLinkStatus(false);
+  };
+
+  const submitJob = async (status: 'active' | 'draft') => {
+    setSubmittingAs(status === 'active' ? 'post' : 'draft');
+    setError(null);
+    setErrorDetails([]);
+
+    try {
+      const formattedJobDescription = formatJobDescriptionToMarkdown(formData.jobDescription);
+      const response = await fetch('/api/jobs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          job_title: formData.jobTitle,
+          company_name: formData.companyName,
+          job_location: formData.location,
+          employment_type: formData.employmentType,
+          experience_level: formData.experienceLevel,
+          skills: formData.skills,
+          job_description: formattedJobDescription,
+          status,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError('Failed to create job');
+        setErrorDetails(data.details || []);
+        return;
+      }
+
+      // Refetch so dashboard updates instantly
+      await qc.refetchQueries({ queryKey: queryKeys.jobs() });
+      onJobposted();
+
+      if (status === 'draft') {
+        // Draft: just close — no public link needed
+        resetForm();
+        onClose();
+      } else {
+        // Active: reset form first, then set ID so resetForm doesn't wipe it
+        const newJobId = data.job?.id || null;
+        resetForm();
+        setCreatedJobId(newJobId);
+        setPublicLinkStatus(true);
+      }
+    } catch (err) {
+      console.error('Error submitting job:', err);
+      setError('Failed to create job');
+      setErrorDetails(['Network error. Please check your connection and try again.']);
+    } finally {
+      setSubmittingAs(null);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await submitJob('active');
+  };
+
+  const handleSaveAsDraft = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    await submitJob('draft');
+  };
+
+  const jobLink = createdJobId ? `${publicLink}/jobs/${createdJobId}` : publicLink || '';
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  const handleOnCloseLinkModal = () => {
+    setPublicLinkStatus(false);
+    setCreatedJobId(null);
+    setCopied(false);
+    onClose();
+  }
+
+  const handleOnClosePostModal = () => {
+    resetForm();
+    onClose();
+  }
+
+  if (!isOpen || !mounted) return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[999] flex items-end sm:items-center justify-center p-0 sm:p-4"
+      onClick={handleBackdropClick}
+    >
+      {/* Backdrop */}
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
+
+      {/* Modal Container */}
+      <div className="relative z-[1000] w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-bottom-4 sm:zoom-in duration-300 mt-auto sm:mt-0">
+        {publicLinkStatus ? <div>
+          <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
+            <div className="flex items-center gap-3">
+              <div className="bg-green-100 p-2 rounded-xl">
+                <BrainCircuit className="h-5 w-5 text-green-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 font-serif tracking-tight">Public Link</h2>
+            </div>
+            <button
+              onClick={handleOnCloseLinkModal}
+              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              aria-label="Close modal"
+            >
+              <X className="h-5 w-5 text-slate-500" />
+            </button>
+          </div>
+          <div className="p-6 space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-slate-900 mb-2">
+                Your job posting is live! Share this link:
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={jobLink}
+                  className="flex-1 px-4 py-2.5 border border-slate-300 rounded-lg bg-slate-50 text-slate-700 font-mono text-sm"
+                />
+                <Button
+                  type="button"
+                  variant="primary"
+                  onClick={() => {
+                    navigator.clipboard.writeText(jobLink || publicLink || '');
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }}
+                >
+                  {copied ? 'Copied!' : 'Copy'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div> : <div>
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
+            <div className="flex items-center gap-3">
+              <div className="bg-primary-600/10 p-2 rounded-xl">
+                <BrainCircuit className="h-5 w-5 text-primary-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 font-serif tracking-tight">Post a New Job</h2>
+            </div>
+            <button
+              onClick={handleOnClosePostModal}
+              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              aria-label="Close modal"
+            >
+              <X className="h-5 w-5 text-slate-500" />
+            </button>
+          </div>
+
+          {/* Content */}
+          <form onSubmit={handleSubmit} className="overflow-y-auto max-h-[calc(90vh-140px)]">
+            <div className="p-6 space-y-6">
+              {/* Error Message */}
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-red-900 mb-1">{error}</p>
+                      {errorDetails.length > 0 && (
+                        <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
+                          {errorDetails.map((detail, index) => (
+                            <li key={index}>{detail}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {/* Job Title */}
+              <div>
+                <label htmlFor="jobTitle" className="block text-sm font-semibold text-slate-900 mb-2">
+                  Job Title *
+                </label>
+                <input
+                  type="text"
+                  id="jobTitle"
+                  name="jobTitle"
+                  value={formData.jobTitle}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="e.g., Senior Software Engineer"
+                />
+              </div>
+
+              {/* Company Name */}
+              <div>
+                <label htmlFor="companyName" className="block text-sm font-semibold text-slate-900 mb-2">
+                  Company Name *
+                </label>
+                <input
+                  type="text"
+                  id="companyName"
+                  name="companyName"
+                  value={formData.companyName}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="e.g., Tech Corp Inc."
+                />
+              </div>
+
+              {/* Location */}
+              <div>
+                <label htmlFor="location" className="block text-sm font-semibold text-slate-900 mb-2">
+                  Location *
+                </label>
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="e.g., San Francisco, CA"
+                />
+              </div>
+
+              {/* Employment Type */}
+              <div>
+                <label htmlFor="employmentType" className="block text-sm font-semibold text-slate-900 mb-2">
+                  Employment Type *
+                </label>
+                <select
+                  id="employmentType"
+                  name="employmentType"
+                  value={formData.employmentType}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                >
+                  <option value="">Select employment type</option>
+                  <option value="full-time">Full-time</option>
+                  <option value="part-time">Part-time</option>
+                  <option value="contract">Contract</option>
+                  <option value="temporary">Temporary</option>
+                </select>
+              </div>
+
+              {/* Experience Level */}
+              <div>
+                <label htmlFor="experienceLevel" className="block text-sm font-semibold text-slate-900 mb-2">
+                  Experience Level *
+                </label>
+                <select
+                  id="experienceLevel"
+                  name="experienceLevel"
+                  value={formData.experienceLevel}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                >
+                  <option value="">Select experience level</option>
+                  <option value="entry">Entry Level</option>
+                  <option value="mid">Mid Level</option>
+                  <option value="senior">Senior Level</option>
+                  <option value="lead">Lead/Manager</option>
+                </select>
+              </div>
+
+              {/* Skills */}
+              <div>
+                <label htmlFor="skills" className="block text-sm font-semibold text-slate-900 mb-2">
+                  Required Skills *
+                </label>
+                <input
+                  type="text"
+                  id="skills"
+                  name="skills"
+                  value={formData.skills}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="e.g., React, TypeScript, Node.js (Min. 3)"
+                />
+                <p className="mt-1.5 text-xs text-slate-500">
+                  Separate skills with commas. At least 3 are required for AI matching.
+                </p>
+              </div>
+
+              {/* Job Description */}
+              <div>
+                <label htmlFor="jobDescription" className="block text-sm font-semibold text-slate-900 mb-2">
+                  Job Description *
+                </label>
+                <textarea
+                  id="jobDescription"
+                  name="jobDescription"
+                  value={formData.jobDescription}
+                  onChange={handleChange}
+                  required
+                  rows={6}
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                  placeholder="Describe the job responsibilities, requirements, and what you're looking for..."
+                />
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50">
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={submittingAs !== null}
+                className="w-full sm:w-auto sm:order-3"
+              >
+                {submittingAs === 'post' ? (
+                  <><Loader2 className="h-4 w-4 animate-spin mr-2" />Posting...</>
+                ) : (
+                  'Post Job'
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={submittingAs !== null}
+                onClick={handleSaveAsDraft}
+                className="w-full sm:w-auto sm:order-2"
+              >
+                {submittingAs === 'draft' ? (
+                  <><Loader2 className="h-4 w-4 animate-spin mr-2" />Saving...</>
+                ) : (
+                  'Save as Draft'
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={handleOnClosePostModal}
+                disabled={submittingAs !== null}
+                className="w-full sm:w-auto sm:order-1"
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </div>}
+      </div>
+    </div>,
+    document.body
+  );
+}

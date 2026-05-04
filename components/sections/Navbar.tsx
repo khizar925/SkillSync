@@ -57,7 +57,7 @@ export default function Navbar() {
 
           {/* CTA — button-in-button pattern */}
           <a
-            href="#features"
+            href="/sign-in"
             className="hidden md:inline-flex items-center gap-2.5 pl-4 pr-1.5 py-1.5 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-bold glow-btn"
           >
             Get Started
@@ -100,7 +100,7 @@ export default function Navbar() {
               ))}
             </nav>
             <a
-              href="#features"
+              href="/sign-in"
               className="flex items-center justify-center gap-2 py-3 rounded-xl bg-green-600 text-white text-sm font-bold"
               onClick={() => setOpen(false)}
             >

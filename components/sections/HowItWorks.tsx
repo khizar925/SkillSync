@@ -93,7 +93,7 @@ export default function HowItWorks() {
           {steps.map((s, i) => (
             <div
               key={i}
-              className="reveal flex flex-col gap-4 sm:gap-6"
+              className="reveal relative z-10 flex flex-col gap-4 sm:gap-6"
               style={{ animationDelay: `${i * 0.1}s` }}
             >
               {/* Step badge + icon */}

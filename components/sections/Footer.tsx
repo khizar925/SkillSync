@@ -5,24 +5,23 @@ const columns = [
       { label: "Features",     href: "#features"     },
       { label: "How It Works", href: "#how-it-works" },
       { label: "Benefits",     href: "#benefits"     },
-      { label: "Pricing",      href: "#"             },
+      { label: "FAQ",          href: "/faq"          },
     ],
   },
   {
     heading: "Company",
     links: [
-      { label: "About",   href: "#" },
-      { label: "Blog",    href: "#" },
-      { label: "Careers", href: "#" },
-      { label: "Contact", href: "#" },
+      { label: "About",   href: "/about" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Contact", href: "mailto:contact@smarthire.website" },
     ],
   },
   {
     heading: "Legal",
     links: [
-      { label: "Privacy Policy",   href: "/privacy" },
-      { label: "Terms of Service", href: "#" },
-      { label: "Cookie Policy",    href: "#" },
+      { label: "Privacy Policy",   href: "/privacy"        },
+      { label: "Terms of Service", href: "/terms"          },
+      { label: "Cookie Policy",    href: "/cookie-policy"  },
     ],
   },
 ];
@@ -37,7 +36,7 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="flex flex-col gap-5">
-            <a href="#" className="flex items-center gap-2.5 w-fit">
+            <a href="/" className="flex items-center gap-2.5 w-fit">
               <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center shadow-md shadow-emerald-600/25">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
                   <path d="M8 2L5 6H2L4.5 8.5L3.5 12L8 9.5L12.5 12L11.5 8.5L14 6H11L8 2Z"

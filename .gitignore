@@ -45,3 +45,13 @@ next-env.d.ts
 .agents/
 skills-lock.json
 
+
+# clerk configuration (can include secrets)
+/.clerk/
+.gstack/
+
+# local MCP config (project-specific, not shared)
+.mcp.json
+
+docs/
+CLAUDE.md
