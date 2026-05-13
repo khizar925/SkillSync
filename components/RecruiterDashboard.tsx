@@ -1,4 +1,3 @@
-// components/RecruiterDashboard.tsx
 'use client';
 
 import { useState } from 'react';
@@ -23,6 +22,7 @@ export function RecruiterDashboard(_props: { firstName?: string }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [jobToEdit, setJobToEdit] = useState<Job | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const { data: jobs = [], isLoading, error, refetch } = useRecruiterJobs();
   const deleteJob = useDeleteJob();
@@ -43,6 +43,7 @@ export function RecruiterDashboard(_props: { firstName?: string }) {
 
   const handleDelete = (e: React.MouseEvent, job: Job) => {
     e.stopPropagation();
+    setDeleteError(null);
     setJobToDelete(job);
     setIsDeleteModalOpen(true);
   };
@@ -54,7 +55,7 @@ export function RecruiterDashboard(_props: { firstName?: string }) {
       setIsDeleteModalOpen(false);
       setJobToDelete(null);
     } catch {
-      alert('Failed to delete job');
+      setDeleteError('Failed to delete job. Try again.');
     }
   };
 
@@ -64,9 +65,9 @@ export function RecruiterDashboard(_props: { firstName?: string }) {
     });
   };
 
-  const truncateDescription = (text: string, maxLength = 150) => {
+  const truncateDescription = (text: string, maxLength = 120) => {
     if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength).trim() + '...';
+    return text.substring(0, maxLength).trim() + '…';
   };
 
   const getDaysLeft = (job: Job): number => {
@@ -77,155 +78,204 @@ export function RecruiterDashboard(_props: { firstName?: string }) {
   const isNewPost = (job: Job): boolean =>
     Date.now() - new Date(job.created_at).getTime() < 3 * 86_400_000;
 
+  const StatusBadge = ({ job }: { job: Job }) => {
+    if (job.status === 'draft') return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+        <span className="w-1 h-1 rounded-full bg-amber-500" /> Draft
+      </span>
+    );
+    if (job.status === 'closed') return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-gray-100 text-gray-500 border border-gray-200">
+        <span className="w-1 h-1 rounded-full bg-gray-400" /> Closed
+      </span>
+    );
+    if (job.status === 'active' && getDaysLeft(job) <= 7 && getDaysLeft(job) > 0) return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-orange-50 text-orange-700 border border-orange-200">
+        <span className="w-1 h-1 rounded-full bg-orange-500" /> Expires {getDaysLeft(job)}d
+      </span>
+    );
+    if (job.status === 'active' && isNewPost(job)) return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" /> New
+      </span>
+    );
+    if (job.status === 'active') return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <span className="w-1 h-1 rounded-full bg-emerald-500" /> Active
+      </span>
+    );
+    return null;
+  };
+
   return (
     <>
-      <div className="space-y-6">
+      <div className="space-y-8">
+
         {/* Top action bar */}
-        <div className="flex items-center justify-between">
-          <div />
-          <Button variant="primary" onClick={() => setIsModalOpen(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Post New Job
-          </Button>
+        <div className="flex items-center justify-end">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="inline-flex items-center gap-2 pl-4 pr-2 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition-all duration-200 active:scale-[0.98] shadow-md shadow-emerald-600/20"
+          >
+            Post a job
+            <span className="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0">
+              <Plus className="h-3.5 w-3.5" />
+            </span>
+          </button>
         </div>
 
-        {/* Analytics section — always visible */}
+        {/* Analytics */}
         <RecruiterAnalytics />
 
-        {/* Job Postings section */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 md:p-8">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-slate-900">Job Postings</h2>
+        {/* Job postings section */}
+        <div>
+          {/* Section header */}
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 tracking-tight">Job postings</h2>
+              {!isLoading && !error && (
+                <p className="text-sm text-gray-400 mt-0.5">
+                  {jobs.length === 0 ? 'No jobs posted yet' : `${jobs.length} active ${jobs.length === 1 ? 'posting' : 'postings'}`}
+                </p>
+              )}
+            </div>
           </div>
 
-          {isLoading && (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
+          {/* Delete error */}
+          {deleteError && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2.5 text-sm text-red-700">
+              <AlertCircle className="h-4 w-4 flex-shrink-0" />
+              {deleteError}
             </div>
           )}
 
-          {error && !isLoading && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-red-900">Failed to load jobs</p>
-                  <button onClick={() => refetch()} className="mt-2 text-sm text-red-700 hover:text-red-900 underline">
-                    Try again
-                  </button>
+          {/* Loading — skeleton cards */}
+          {isLoading && (
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 space-y-3 animate-pulse">
+                  <div className="flex items-center justify-between">
+                    <div className="h-4 w-2/3 bg-gray-100 rounded-md" />
+                    <div className="h-5 w-14 bg-gray-100 rounded-md" />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-3 w-1/2 bg-gray-100 rounded" />
+                    <div className="h-3 w-1/3 bg-gray-100 rounded" />
+                    <div className="h-3 w-2/5 bg-gray-100 rounded" />
+                  </div>
+                  <div className="h-3 w-full bg-gray-100 rounded" />
+                  <div className="h-3 w-4/5 bg-gray-100 rounded" />
+                  <div className="h-9 w-full bg-gray-100 rounded-xl mt-2" />
                 </div>
+              ))}
+            </div>
+          )}
+
+          {/* Fetch error */}
+          {error && !isLoading && (
+            <div className="bg-red-50 border border-red-200 rounded-2xl p-5 flex items-start gap-3">
+              <AlertCircle className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-red-800">Failed to load job postings</p>
+                <button onClick={() => refetch()} className="mt-1 text-sm text-red-600 hover:text-red-800 underline transition-colors">
+                  Try again
+                </button>
               </div>
             </div>
           )}
 
+          {/* Empty state */}
           {!isLoading && !error && jobs.length === 0 && (
-            <div className="text-center py-12">
-              <Briefcase className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">No jobs posted yet</h3>
-              <p className="text-slate-600 mb-4">Get started by posting your first job opening.</p>
-              <Button variant="primary" onClick={() => setIsModalOpen(true)}>
-                Post Your First Job
-              </Button>
+            <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mx-auto mb-4">
+                <Briefcase className="h-6 w-6 text-emerald-600" />
+              </div>
+              <h3 className="text-base font-bold text-gray-900 mb-1">No jobs posted yet</h3>
+              <p className="text-sm text-gray-400 mb-6 max-w-xs mx-auto">
+                Post your first opening and start receiving AI-scored applications.
+              </p>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition-all duration-200 active:scale-[0.98] shadow-md shadow-emerald-600/20"
+              >
+                <Plus className="h-4 w-4" />
+                Post first job
+              </button>
             </div>
           )}
 
+          {/* Job cards — 2-col on md, 3-col on xl */}
           {!isLoading && !error && jobs.length > 0 && (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
               {jobs.map((job: Job) => (
                 <div
                   key={job.id}
-                  className="border border-slate-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow flex flex-col overflow-hidden"
+                  className="group bg-white rounded-2xl border border-gray-100 p-5 flex flex-col hover:shadow-md hover:shadow-emerald-600/5 hover:border-emerald-100 transition-all duration-200"
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-bold text-slate-900 truncate pr-2" title={job.job_title}>
-                        {job.job_title}
-                      </h3>
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0 ml-2">
-                      {job.status === 'draft' && (
-                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 bg-amber-100 text-amber-700">
-                          Draft
-                        </span>
-                      )}
-                      {job.status === 'closed' && (
-                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 bg-slate-100 text-slate-600">
-                          Closed
-                        </span>
-                      )}
-                      {job.status === 'active' && getDaysLeft(job) <= 7 && getDaysLeft(job) > 0 && (
-                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 bg-orange-100 text-orange-700">
-                          Expires in {getDaysLeft(job)}d
-                        </span>
-                      )}
-                      {job.status === 'active' && getDaysLeft(job) > 7 && isNewPost(job) && (
-                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 bg-green-100 text-green-700">
-                          New
-                        </span>
-                      )}
+                  {/* Card header */}
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <h3 className="font-bold text-gray-900 text-sm leading-snug truncate" title={job.job_title}>
+                      {job.job_title}
+                    </h3>
+                    <div className="flex-shrink-0 flex items-center gap-1">
+                      <StatusBadge job={job} />
                       <button
                         onClick={(e) => handleCopyLink(e, job)}
-                        className="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-md transition-all"
+                        className="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-150"
                         title="Copy job link"
                       >
-                        {copiedId === job.id ? (
-                          <Check className="h-4 w-4 text-green-500" />
-                        ) : (
-                          <Link2 className="h-4 w-4" />
-                        )}
+                        {copiedId === job.id ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Link2 className="h-3.5 w-3.5" />}
                       </button>
                       <button
                         onClick={(e) => handleEdit(e, job)}
-                        className="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-md transition-all"
-                        title="Edit job posting"
+                        className="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-150"
+                        title="Edit job"
                       >
-                        <Pencil className="h-4 w-4" />
+                        <Pencil className="h-3.5 w-3.5" />
                       </button>
                       <button
                         onClick={(e) => handleDelete(e, job)}
                         disabled={deleteJob.isPending && jobToDelete?.id === job.id}
-                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-all disabled:opacity-50"
-                        title="Delete job posting"
+                        className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all duration-150 disabled:opacity-50"
+                        title="Delete job"
                       >
-                        {deleteJob.isPending && jobToDelete?.id === job.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin text-red-600" />
-                        ) : (
-                          <Trash2 className="h-4 w-4" />
-                        )}
+                        {deleteJob.isPending && jobToDelete?.id === job.id
+                          ? <Loader2 className="h-3.5 w-3.5 animate-spin text-red-500" />
+                          : <Trash2 className="h-3.5 w-3.5" />}
                       </button>
                     </div>
                   </div>
 
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <MapPin className="h-4 w-4 flex-shrink-0" />
-                      <span>{job.job_location}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Clock className="h-4 w-4 flex-shrink-0" />
-                      <span className="capitalize">{job.employment_type.replace('-', ' ')}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Users className="h-4 w-4 flex-shrink-0" />
-                      <span>{job.applicants_count} {job.applicants_count === 1 ? 'applicant' : 'applicants'}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Calendar className="h-4 w-4 flex-shrink-0" />
-                      <span>Posted {formatDate(job.created_at)}</span>
-                    </div>
+                  {/* Meta */}
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <span className="inline-flex items-center gap-1 text-[11px] text-gray-500 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded-md">
+                      <MapPin className="h-3 w-3" /> {job.job_location}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[11px] text-gray-500 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded-md">
+                      <Clock className="h-3 w-3" /> <span className="capitalize">{job.employment_type.replace('-', ' ')}</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[11px] text-gray-500 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded-md">
+                      <Users className="h-3 w-3" /> {job.applicants_count} {job.applicants_count === 1 ? 'applicant' : 'applicants'}
+                    </span>
                   </div>
 
-                  <p className="text-sm text-slate-600 line-clamp-3 mb-4">
+                  {/* Description */}
+                  <p className="text-xs text-gray-400 leading-relaxed line-clamp-2 mb-4 flex-1">
                     {truncateDescription(job.job_description)}
                   </p>
 
-                  <Button
-                    variant="primary"
-                    className="w-full mt-auto"
-                    onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
-                  >
-                    View Details
-                  </Button>
+                  {/* Footer */}
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-50">
+                    <span className="inline-flex items-center gap-1 text-[11px] text-gray-400">
+                      <Calendar className="h-3 w-3" /> {formatDate(job.created_at)}
+                    </span>
+                    <button
+                      onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
+                      className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
+                    >
+                      View details →
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -236,28 +286,25 @@ export function RecruiterDashboard(_props: { firstName?: string }) {
       <PostJobModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onJobposted={() => {}} // invalidation handled by mutation
+        onJobposted={() => {}}
       />
-
       <EditJobModal
         isOpen={isEditModalOpen}
         onClose={() => { setIsEditModalOpen(false); setJobToEdit(null); }}
         job={jobToEdit}
       />
-
       <JobDetailsModal
         isOpen={isDetailsModalOpen}
         onClose={() => { setIsDetailsModalOpen(false); setSelectedJob(null); }}
         job={selectedJob}
       />
-
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
         isDeleting={deleteJob.isPending}
-        onClose={() => { setIsDeleteModalOpen(false); setJobToDelete(null); }}
+        onClose={() => { setIsDeleteModalOpen(false); setJobToDelete(null); setDeleteError(null); }}
         onConfirm={handleConfirmDelete}
-        title="Delete Job Posting"
-        message={`Are you sure you want to delete "${jobToDelete?.job_title}"? This action cannot be undone.`}
+        title="Delete job posting"
+        message={`Delete "${jobToDelete?.job_title}"? This cannot be undone.`}
       />
     </>
   );

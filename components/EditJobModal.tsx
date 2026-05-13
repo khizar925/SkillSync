@@ -95,21 +95,21 @@ export function EditJobModal({ isOpen, onClose, job }: EditJobModalProps) {
     >
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
 
-      <div className="relative z-[1000] w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-bottom-4 sm:zoom-in duration-300 mt-auto sm:mt-0">
+      <div className="relative z-[1000] w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-gray-200 overflow-hidden animate-in fade-in slide-in-from-bottom-4 sm:zoom-in duration-300 mt-auto sm:mt-0">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
+        <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-white">
           <div className="flex items-center gap-3">
-            <div className="bg-primary-600/10 p-2 rounded-xl">
-              <Pencil className="h-5 w-5 text-primary-600" />
+            <div className="bg-emerald-600/10 p-2 rounded-xl">
+              <Pencil className="h-5 w-5 text-emerald-600" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-900 font-serif tracking-tight">Edit Job</h2>
+            <h2 className="text-2xl font-bold text-gray-900 font-serif tracking-tight">Edit Job</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             aria-label="Close modal"
           >
-            <X className="h-5 w-5 text-slate-500" />
+            <X className="h-5 w-5 text-gray-500" />
           </button>
         </div>
 
@@ -128,27 +128,27 @@ export function EditJobModal({ isOpen, onClose, job }: EditJobModalProps) {
             )}
 
             <div>
-              <label htmlFor="job_title" className="block text-sm font-semibold text-slate-900 mb-2">Job Title *</label>
+              <label htmlFor="job_title" className="block text-sm font-semibold text-gray-900 mb-2">Job Title *</label>
               <input type="text" id="job_title" name="job_title" value={formData.job_title} onChange={handleChange} required
-                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
             </div>
 
             <div>
-              <label htmlFor="company_name" className="block text-sm font-semibold text-slate-900 mb-2">Company Name *</label>
+              <label htmlFor="company_name" className="block text-sm font-semibold text-gray-900 mb-2">Company Name *</label>
               <input type="text" id="company_name" name="company_name" value={formData.company_name} onChange={handleChange} required
-                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
             </div>
 
             <div>
-              <label htmlFor="job_location" className="block text-sm font-semibold text-slate-900 mb-2">Location *</label>
+              <label htmlFor="job_location" className="block text-sm font-semibold text-gray-900 mb-2">Location *</label>
               <input type="text" id="job_location" name="job_location" value={formData.job_location} onChange={handleChange} required
-                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
             </div>
 
             <div>
-              <label htmlFor="employment_type" className="block text-sm font-semibold text-slate-900 mb-2">Employment Type *</label>
+              <label htmlFor="employment_type" className="block text-sm font-semibold text-gray-900 mb-2">Employment Type *</label>
               <select id="employment_type" name="employment_type" value={formData.employment_type} onChange={handleChange} required
-                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                 <option value="">Select employment type</option>
                 <option value="full-time">Full-time</option>
                 <option value="part-time">Part-time</option>
@@ -158,9 +158,9 @@ export function EditJobModal({ isOpen, onClose, job }: EditJobModalProps) {
             </div>
 
             <div>
-              <label htmlFor="experience_level" className="block text-sm font-semibold text-slate-900 mb-2">Experience Level *</label>
+              <label htmlFor="experience_level" className="block text-sm font-semibold text-gray-900 mb-2">Experience Level *</label>
               <select id="experience_level" name="experience_level" value={formData.experience_level} onChange={handleChange} required
-                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                 <option value="">Select experience level</option>
                 <option value="entry">Entry Level</option>
                 <option value="mid">Mid Level</option>
@@ -170,9 +170,9 @@ export function EditJobModal({ isOpen, onClose, job }: EditJobModalProps) {
             </div>
 
             <div>
-              <label htmlFor="status" className="block text-sm font-semibold text-slate-900 mb-2">Status *</label>
+              <label htmlFor="status" className="block text-sm font-semibold text-gray-900 mb-2">Status *</label>
               <select id="status" name="status" value={formData.status} onChange={handleChange} required
-                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                 <option value="active">Active</option>
                 <option value="draft">Draft</option>
                 <option value="closed">Closed</option>
@@ -180,20 +180,20 @@ export function EditJobModal({ isOpen, onClose, job }: EditJobModalProps) {
             </div>
 
             <div>
-              <label htmlFor="skills" className="block text-sm font-semibold text-slate-900 mb-2">Required Skills *</label>
+              <label htmlFor="skills" className="block text-sm font-semibold text-gray-900 mb-2">Required Skills *</label>
               <input type="text" id="skills" name="skills" value={formData.skills} onChange={handleChange} required
-                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
-              <p className="mt-1.5 text-xs text-slate-500">Separate skills with commas. At least 3 are required.</p>
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+              <p className="mt-1.5 text-xs text-gray-500">Separate skills with commas. At least 3 are required.</p>
             </div>
 
             <div>
-              <label htmlFor="job_description" className="block text-sm font-semibold text-slate-900 mb-2">Job Description *</label>
+              <label htmlFor="job_description" className="block text-sm font-semibold text-gray-900 mb-2">Job Description *</label>
               <textarea id="job_description" name="job_description" value={formData.job_description} onChange={handleChange} required rows={6}
-                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none" />
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none" />
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50">
+          <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-100 bg-gray-50">
             <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
             <Button type="submit" variant="primary" disabled={updateJob.isPending}>
               {updateJob.isPending ? (

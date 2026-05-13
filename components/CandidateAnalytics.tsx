@@ -8,33 +8,26 @@ import { ScoreTrendChart } from './charts/ScoreTrendChart';
 
 function AnalyticsSkeleton() {
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-        <Skeleton className="h-5 w-40 mb-4" />
-        <Skeleton className="h-64 w-full" />
-      </div>
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-        <Skeleton className="h-5 w-40 mb-4" />
-        <Skeleton className="h-64 w-full" />
-      </div>
+    <div className="grid md:grid-cols-2 gap-4">
+      {[1, 2].map((i) => (
+        <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 animate-pulse">
+          <Skeleton className="h-4 w-36 mb-4" />
+          <Skeleton className="h-60 w-full" />
+        </div>
+      ))}
     </div>
   );
 }
 
 function AnalyticsError({ onRetry }: { onRetry: () => void }) {
   return (
-    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-      <div className="flex items-start gap-3">
-        <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-        <div className="flex-1">
-          <p className="text-sm font-semibold text-red-900">Failed to load analytics</p>
-          <button
-            onClick={onRetry}
-            className="mt-2 text-sm text-red-700 hover:text-red-900 underline"
-          >
-            Try again
-          </button>
-        </div>
+    <div className="bg-red-50 border border-red-200 rounded-2xl p-5 flex items-start gap-3">
+      <AlertCircle className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
+      <div>
+        <p className="text-sm font-semibold text-red-800">Failed to load analytics</p>
+        <button onClick={onRetry} className="mt-1 text-sm text-red-600 hover:text-red-800 underline transition-colors">
+          Try again
+        </button>
       </div>
     </div>
   );
@@ -48,16 +41,16 @@ export function CandidateAnalytics() {
   if (!data) return null;
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-        <h3 className="text-base font-semibold text-slate-900 mb-4">Application Status</h3>
-        <div className="h-64">
+    <div className="grid md:grid-cols-2 gap-4">
+      <div className="bg-white rounded-2xl border border-gray-100 p-5">
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Application status</h3>
+        <div className="h-60">
           <StatusBreakdownChart data={data.statusSummary} />
         </div>
       </div>
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-        <h3 className="text-base font-semibold text-slate-900 mb-4">Score Trend</h3>
-        <div className="h-64">
+      <div className="bg-white rounded-2xl border border-gray-100 p-5">
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Score trend</h3>
+        <div className="h-60">
           <ScoreTrendChart data={data.scoreTrend} />
         </div>
       </div>

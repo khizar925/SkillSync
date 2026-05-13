@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase-server';
 import { requireRole } from '@/lib/auth';
+import { scoreResume } from '@/lib/scoring-client';
 
 export async function POST(request: Request) {
     try {
@@ -13,7 +14,6 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'applicationId is required' }, { status: 400 });
         }
 
-        // Fetch application + job description, verify recruiter ownership
         const { data: app, error: appError } = await supabase
             .from('applications')
             .select('id, job_id, resume_text, jobs(recruiter_id, job_description)')
@@ -29,48 +29,37 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
 
+        const resumeText: string = app.resume_text ?? '';
         // @ts-ignore — nested join
         const jobDescription: string = app.jobs.job_description;
-        const resumeText: string = app.resume_text ?? '';
 
         if (!resumeText) {
             return NextResponse.json({ error: 'No resume text available to score' }, { status: 400 });
         }
 
-        const backendUrl = process.env.BACKEND_URL?.replace(/\/$/, '');
-        const apiKey = process.env.API_KEY;
-
-        if (!backendUrl || !apiKey) {
+        if (!process.env.BACKEND_URL || !process.env.API_KEY) {
             return NextResponse.json({ error: 'Scoring service not configured' }, { status: 503 });
         }
 
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 30000);
+        const result = await scoreResume(resumeText, jobDescription);
 
-        const scoreRes = await fetch(`${backendUrl}/score-single`, {
-            method: 'POST',
-            headers: { 'X-API-Key': apiKey, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ resume_text: resumeText, job_description: jobDescription }),
-            signal: controller.signal,
-        });
-
-        clearTimeout(timeout);
-
-        if (!scoreRes.ok) {
-            const text = await scoreRes.text();
-            console.error('Scoring backend error:', text);
-            return NextResponse.json({ error: 'Scoring service returned an error' }, { status: 502 });
+        if (!result) {
+            return NextResponse.json({ error: 'Scoring service unavailable' }, { status: 503 });
         }
 
-        const { score, breakdown } = await scoreRes.json();
         const now = new Date().toISOString();
-
         await supabase.from('scores').upsert(
-            [{ job_id: app.job_id, application_id: applicationId, score, breakdown: breakdown ?? null, scored_at: now }],
+            [{
+                job_id: app.job_id,
+                application_id: applicationId,
+                score: result.score,
+                breakdown: result.breakdown,
+                scored_at: now,
+            }],
             { onConflict: 'job_id,application_id' }
         );
 
-        return NextResponse.json({ success: true, score });
+        return NextResponse.json({ success: true, score: result.score });
     } catch (error) {
         console.error('Retry score error:', error);
         return NextResponse.json({ error: 'Scoring service is unavailable' }, { status: 503 });

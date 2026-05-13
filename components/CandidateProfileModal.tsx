@@ -100,7 +100,7 @@ export function CandidateProfileModal({ isOpen, onClose }: CandidateProfileModal
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-gray-900/50 backdrop-blur-sm">
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -108,19 +108,19 @@ export function CandidateProfileModal({ isOpen, onClose }: CandidateProfileModal
                 className="bg-white rounded-t-2xl sm:rounded-2xl shadow-xl w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col mt-auto sm:mt-0"
             >
                 {/* Header */}
-                <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white">
+                <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-white">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary-50 rounded-lg">
-                            <User className="h-6 w-6 text-primary-600" />
+                        <div className="p-2 bg-emerald-50 rounded-lg">
+                            <User className="h-6 w-6 text-emerald-600" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold text-slate-900">My Profile</h2>
-                            <p className="text-sm text-slate-500">Update your details for auto-filling applications</p>
+                            <h2 className="text-xl font-bold text-gray-900">My Profile</h2>
+                            <p className="text-sm text-gray-500">Update your details for auto-filling applications</p>
                         </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                        className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600"
                     >
                         <X className="h-6 w-6" />
                     </button>
@@ -130,15 +130,15 @@ export function CandidateProfileModal({ isOpen, onClose }: CandidateProfileModal
                 <div className="flex-1 overflow-y-auto p-6">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 gap-4">
-                            <Loader2 className="h-10 w-10 animate-spin text-primary-600" />
-                            <p className="text-slate-500 font-medium">Loading your profile...</p>
+                            <Loader2 className="h-10 w-10 animate-spin text-emerald-600" />
+                            <p className="text-gray-500 font-medium">Loading your profile...</p>
                         </div>
                     ) : (
                         <form id="profile-form" onSubmit={handleSubmit} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Full Name */}
                                 <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                                         <User className="h-4 w-4" /> Full Name
                                     </label>
                                     <input
@@ -147,14 +147,14 @@ export function CandidateProfileModal({ isOpen, onClose }: CandidateProfileModal
                                         value={formData.fullName}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
                                         placeholder="John Doe"
                                     />
                                 </div>
 
                                 {/* Email */}
                                 <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                                         <Mail className="h-4 w-4" /> Email address
                                     </label>
                                     <input
@@ -163,14 +163,14 @@ export function CandidateProfileModal({ isOpen, onClose }: CandidateProfileModal
                                         value={formData.email}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
                                         placeholder="john@example.com"
                                     />
                                 </div>
 
                                 {/* Phone */}
                                 <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                                         <Phone className="h-4 w-4" /> Phone Number
                                     </label>
                                     <input
@@ -178,14 +178,14 @@ export function CandidateProfileModal({ isOpen, onClose }: CandidateProfileModal
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
                                         placeholder="+1 (555) 000-0000"
                                     />
                                 </div>
 
                                 {/* Years of Experience */}
                                 <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                                         <Briefcase className="h-4 w-4" /> Years of Experience
                                     </label>
                                     <input
@@ -195,21 +195,21 @@ export function CandidateProfileModal({ isOpen, onClose }: CandidateProfileModal
                                         onChange={handleChange}
                                         step="0.5"
                                         min="0"
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
                                         placeholder="5"
                                     />
                                 </div>
 
                                 {/* Education Level */}
                                 <div className="space-y-2 md:col-span-2">
-                                    <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                                         <GraduationCap className="h-4 w-4" /> Highest Education Level
                                     </label>
                                     <select
                                         name="educationLevel"
                                         value={formData.educationLevel}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all bg-white"
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all bg-white"
                                     >
                                         <option value="">Select Level</option>
                                         <option value="bachelors">Bachelor's Degree</option>
@@ -222,7 +222,7 @@ export function CandidateProfileModal({ isOpen, onClose }: CandidateProfileModal
 
                                 {/* Address */}
                                 <div className="space-y-2 md:col-span-2">
-                                    <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                                         <MapPin className="h-4 w-4" /> Address
                                     </label>
                                     <textarea
@@ -230,7 +230,7 @@ export function CandidateProfileModal({ isOpen, onClose }: CandidateProfileModal
                                         value={formData.address}
                                         onChange={handleChange}
                                         rows={2}
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all resize-none"
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all resize-none"
                                         placeholder="123 Main St, City, Country"
                                     />
                                 </div>
@@ -248,7 +248,7 @@ export function CandidateProfileModal({ isOpen, onClose }: CandidateProfileModal
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
+                <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
                     <Button
                         variant="secondary"
                         onClick={onClose}

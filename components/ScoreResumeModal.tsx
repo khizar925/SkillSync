@@ -171,20 +171,20 @@ export function ScoreResumeModal({ isOpen, onClose }: ScoreResumeModalProps) {
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 40 }}
-                className="relative z-[1000] w-full max-w-lg bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh] mt-auto sm:mt-0"
+                className="relative z-[1000] w-full max-w-lg bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh] mt-auto sm:mt-0"
             >
                 {/* Header */}
-                <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white flex-shrink-0">
+                <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-white flex-shrink-0">
                     <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-primary-600 text-white rounded-xl shadow-lg shadow-primary-600/20">
+                        <div className="p-2.5 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-600/20">
                             <Sparkles className="h-5 w-5" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold text-slate-900 font-serif tracking-tight">Score My Resume</h2>
-                            <p className="text-xs text-slate-500 font-medium">Get instant AI-powered feedback on your resume</p>
+                            <h2 className="text-xl font-bold text-gray-900 font-serif tracking-tight">Score My Resume</h2>
+                            <p className="text-xs text-gray-500 font-medium">Get instant AI-powered feedback on your resume</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600">
+                    <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600">
                         <X className="h-5 w-5" />
                     </button>
                 </div>
@@ -196,21 +196,21 @@ export function ScoreResumeModal({ isOpen, onClose }: ScoreResumeModalProps) {
                             {/* Upload Area */}
                             <div
                                 onClick={() => fileInputRef.current?.click()}
-                                className={`border-2 border-dashed rounded-2xl p-8 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer ${file ? 'border-primary-500 bg-primary-50/30' : 'border-slate-200 hover:border-primary-400 hover:bg-slate-50'}`}
+                                className={`border-2 border-dashed rounded-2xl p-8 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer ${file ? 'border-emerald-500 bg-emerald-50/30' : 'border-gray-200 hover:border-emerald-400 hover:bg-gray-50'}`}
                             >
                                 <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept=".pdf,.docx,.txt" />
-                                <div className={`p-3 rounded-full ${file ? 'bg-primary-100 text-primary-600' : 'bg-slate-100 text-slate-400'}`}>
+                                <div className={`p-3 rounded-full ${file ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'}`}>
                                     {file ? <FileText className="h-7 w-7" /> : <Upload className="h-7 w-7" />}
                                 </div>
                                 <div className="text-center">
-                                    <p className="font-bold text-slate-900">{file ? file.name : 'Click to upload resume'}</p>
-                                    <p className="text-sm text-slate-500 mt-0.5">Supports PDF, DOCX, and TXT (Max 5MB)</p>
+                                    <p className="font-bold text-gray-900">{file ? file.name : 'Click to upload resume'}</p>
+                                    <p className="text-sm text-gray-500 mt-0.5">Supports PDF, DOCX, and TXT (Max 5MB)</p>
                                 </div>
                             </div>
 
                             {/* JD Mode Selector */}
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-slate-700">Score against</label>
+                                <label className="text-sm font-semibold text-gray-700">Score against</label>
                                 <div className="grid grid-cols-2 gap-3">
                                     {([
                                         { mode: 'job' as JdMode, icon: Briefcase, label: 'Existing Job', desc: 'Match against a live job posting' },
@@ -225,14 +225,14 @@ export function ScoreResumeModal({ isOpen, onClose }: ScoreResumeModalProps) {
                                                 setJobSearch('');
                                                 setShowJobList(false);
                                             }}
-                                            className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all ${jdMode === mode ? 'border-primary-500 bg-primary-50' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'}`}
+                                            className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all ${jdMode === mode ? 'border-emerald-500 bg-emerald-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}`}
                                         >
-                                            <div className={`mt-0.5 p-1.5 rounded-lg flex-shrink-0 ${jdMode === mode ? 'bg-primary-100 text-primary-600' : 'bg-slate-100 text-slate-400'}`}>
+                                            <div className={`mt-0.5 p-1.5 rounded-lg flex-shrink-0 ${jdMode === mode ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'}`}>
                                                 <Icon className="h-4 w-4" />
                                             </div>
                                             <div>
-                                                <p className={`text-sm font-semibold ${jdMode === mode ? 'text-primary-700' : 'text-slate-700'}`}>{label}</p>
-                                                <p className="text-xs text-slate-400 mt-0.5 leading-snug">{desc}</p>
+                                                <p className={`text-sm font-semibold ${jdMode === mode ? 'text-emerald-700' : 'text-gray-700'}`}>{label}</p>
+                                                <p className="text-xs text-gray-400 mt-0.5 leading-snug">{desc}</p>
                                             </div>
                                         </button>
                                     ))}
@@ -242,16 +242,16 @@ export function ScoreResumeModal({ isOpen, onClose }: ScoreResumeModalProps) {
                             {/* Job search (mode: job) */}
                             {jdMode === 'job' && (
                                 <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                                        <Briefcase className="h-4 w-4 text-slate-400" />
+                                    <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                                        <Briefcase className="h-4 w-4 text-gray-400" />
                                         Search for a job
                                     </label>
                                     {selectedJobId ? (
-                                        <div className="flex items-center justify-between px-4 py-3 border-2 border-primary-500 bg-primary-50 rounded-xl">
-                                            <span className="text-sm font-medium text-primary-800 truncate">{selectedJobLabel}</span>
+                                        <div className="flex items-center justify-between px-4 py-3 border-2 border-emerald-500 bg-emerald-50 rounded-xl">
+                                            <span className="text-sm font-medium text-emerald-800 truncate">{selectedJobLabel}</span>
                                             <button
                                                 onClick={() => { setSelectedJobId(''); setSelectedJobLabel(''); setJobSearch(''); }}
-                                                className="ml-2 text-primary-500 hover:text-primary-700 flex-shrink-0"
+                                                className="ml-2 text-emerald-500 hover:text-emerald-700 flex-shrink-0"
                                             >
                                                 <X className="h-4 w-4" />
                                             </button>
@@ -265,19 +265,19 @@ export function ScoreResumeModal({ isOpen, onClose }: ScoreResumeModalProps) {
                                                 onChange={e => setJobSearch(e.target.value)}
                                                 onFocus={() => { setShowJobList(true); if (!jobs.length) searchJobs(jobSearch); }}
                                                 placeholder="Search by title or company..."
-                                                className="w-full h-11 px-4 border border-slate-200 rounded-xl bg-white text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                                className="w-full h-11 px-4 border border-gray-200 rounded-xl bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                                             />
                                             {showJobList && (
                                                 <div
                                                     ref={jobListRef}
-                                                    className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto"
+                                                    className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto"
                                                 >
                                                     {jobsLoading ? (
-                                                        <div className="flex items-center gap-2 px-4 py-3 text-sm text-slate-400">
+                                                        <div className="flex items-center gap-2 px-4 py-3 text-sm text-gray-400">
                                                             <Loader2 className="h-4 w-4 animate-spin" /> Searching...
                                                         </div>
                                                     ) : jobs.length === 0 ? (
-                                                        <div className="px-4 py-3 text-sm text-slate-400">No jobs found</div>
+                                                        <div className="px-4 py-3 text-sm text-gray-400">No jobs found</div>
                                                     ) : (
                                                         jobs.map(job => (
                                                             <button
@@ -287,10 +287,10 @@ export function ScoreResumeModal({ isOpen, onClose }: ScoreResumeModalProps) {
                                                                     setSelectedJobLabel(`${job.job_title} — ${job.company_name}`);
                                                                     setShowJobList(false);
                                                                 }}
-                                                                className="w-full text-left px-4 py-3 text-sm hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0"
+                                                                className="w-full text-left px-4 py-3 text-sm hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0"
                                                             >
-                                                                <span className="font-medium text-slate-900">{job.job_title}</span>
-                                                                <span className="text-slate-500"> — {job.company_name}</span>
+                                                                <span className="font-medium text-gray-900">{job.job_title}</span>
+                                                                <span className="text-gray-500"> — {job.company_name}</span>
                                                             </button>
                                                         ))
                                                     )}
@@ -304,8 +304,8 @@ export function ScoreResumeModal({ isOpen, onClose }: ScoreResumeModalProps) {
                             {/* Custom JD textarea (mode: custom) */}
                             {jdMode === 'custom' && (
                                 <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                                        <PenLine className="h-4 w-4 text-slate-400" />
+                                    <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                                        <PenLine className="h-4 w-4 text-gray-400" />
                                         Paste job description
                                     </label>
                                     <textarea
@@ -313,7 +313,7 @@ export function ScoreResumeModal({ isOpen, onClose }: ScoreResumeModalProps) {
                                         onChange={e => setCustomJd(e.target.value)}
                                         placeholder="Paste the full job description here..."
                                         rows={5}
-                                        className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-white text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                                        className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
                                     />
                                     {customJd.trim().length > 0 && customJd.trim().length < 20 && (
                                         <p className="text-xs text-amber-600">Please enter at least 20 characters</p>
@@ -332,7 +332,7 @@ export function ScoreResumeModal({ isOpen, onClose }: ScoreResumeModalProps) {
                                 onClick={handleCheckScore}
                                 disabled={!canScore || isScoring}
                                 variant="primary"
-                                className="w-full h-12 text-base font-bold shadow-lg shadow-primary-600/20"
+                                className="w-full h-12 text-base font-bold shadow-lg shadow-emerald-600/20"
                             >
                                 {isScoring ? (
                                     <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Analyzing Resume...</>
@@ -346,27 +346,27 @@ export function ScoreResumeModal({ isOpen, onClose }: ScoreResumeModalProps) {
                         <div className="flex flex-col items-center py-6 text-center animate-in fade-in zoom-in duration-500">
                             <div className="relative mb-6">
                                 <svg className="h-32 w-32 transform -rotate-90">
-                                    <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-slate-100" />
+                                    <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-gray-100" />
                                     <circle
                                         cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="8" fill="transparent"
                                         strokeDasharray={364.4}
                                         strokeDashoffset={364.4 - (364.4 * score) / 100}
-                                        className="text-primary-600 transition-all duration-1000 ease-out"
+                                        className="text-emerald-600 transition-all duration-1000 ease-out"
                                         strokeLinecap="round"
                                     />
                                 </svg>
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-3xl font-bold text-slate-900 font-serif">{score}</span>
+                                    <span className="text-3xl font-bold text-gray-900 font-serif">{score}</span>
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex items-center justify-center gap-2 text-primary-700 bg-primary-50 px-3 py-1 rounded-full text-sm font-bold">
+                                <div className="flex items-center justify-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full text-sm font-bold">
                                     <CheckCircle className="h-4 w-4" />
                                     AI Score Assigned
                                 </div>
-                                <h3 className="text-2xl font-bold text-slate-900 font-serif">{feedback!.heading}</h3>
-                                <p className="text-slate-500 max-w-xs mx-auto">{feedback!.body}</p>
+                                <h3 className="text-2xl font-bold text-gray-900 font-serif">{feedback!.heading}</h3>
+                                <p className="text-gray-500 max-w-xs mx-auto">{feedback!.body}</p>
                             </div>
 
                             <Button onClick={resetForm} variant="secondary" className="mt-8 w-full font-bold">
@@ -377,8 +377,8 @@ export function ScoreResumeModal({ isOpen, onClose }: ScoreResumeModalProps) {
                 </div>
 
                 {score === null && (
-                    <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-center flex-shrink-0">
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Secure • Private • AI-Powered</p>
+                    <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-center flex-shrink-0">
+                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Secure • Private • AI-Powered</p>
                     </div>
                 )}
             </motion.div>

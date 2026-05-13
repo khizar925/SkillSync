@@ -3,8 +3,7 @@
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Briefcase, Users, Loader2, AlertCircle } from 'lucide-react';
-import { Button } from '@/components/Button';
+import { Briefcase, Users, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 import type { UserRole } from '@/types';
 
 export default function OnboardingPage() {
@@ -15,25 +14,21 @@ export default function OnboardingPage() {
   const [error, setError] = useState<string | null>(null);
   const [isCheckingRole, setIsCheckingRole] = useState(true);
 
-  // Check if user already has a role and redirect to dashboard
   useEffect(() => {
     if (isLoaded && user) {
       const existingRole = user.publicMetadata?.role as UserRole | undefined;
       if (existingRole) {
-        // User has a role, redirect to dashboard (loader will show during redirect)
         router.push('/dashboard');
       } else {
-        // User doesn't have a role, show onboarding UI
         setIsCheckingRole(false);
       }
     } else if (isLoaded && !user) {
-      // User is not authenticated, redirect to sign-in
       router.push('/sign-in');
     }
   }, [isLoaded, user, router]);
 
   const handleRoleSelection = async (role: UserRole) => {
-    if (isSaving) return; // Prevent double submissions
+    if (isSaving) return;
 
     setSelectedRole(role);
     setError(null);
@@ -42,18 +37,15 @@ export default function OnboardingPage() {
     try {
       const response = await fetch('/api/user/role', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ role }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle different error status codes
         if (response.status === 409) {
-          setError('Your role has already been set and cannot be changed.');
+          setError('Role already set and cannot be changed.');
         } else if (response.status === 400) {
           setError(data.error || 'Invalid role selected.');
         } else if (response.status === 401) {
@@ -61,141 +53,195 @@ export default function OnboardingPage() {
           router.push('/sign-in');
           return;
         } else {
-          setError(data.error || 'An error occurred. Please try again.');
+          setError(data.error || 'Something went wrong. Try again.');
         }
         setIsSaving(false);
         return;
       }
 
-      // Full page navigation — bypasses client-side RSC cache
-      // guarantees currentUser() on server gets fresh Clerk data with new role
       window.location.href = '/dashboard';
-    } catch (err) {
-      console.error('Error saving role:', err);
-      setError('Network error. Please check your connection and try again.');
+    } catch {
+      setError('Connection failed. Check your network and try again.');
       setIsSaving(false);
     }
   };
 
-  // Show loading state while checking user or role
   if (!isLoaded || isCheckingRole) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white">
+        <a href="/" className="flex items-center gap-2.5 mb-8">
+          <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center shadow-md shadow-emerald-600/25">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+              <path d="M8 2L5 6H2L4.5 8.5L3.5 12L8 9.5L12.5 12L11.5 8.5L14 6H11L8 2Z" fill="white" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <span className="font-bold text-lg tracking-tight text-gray-900">Smart<span className="text-emerald-600">Hire</span></span>
+        </a>
+        <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
       </div>
     );
   }
 
-  // If user is not authenticated, redirect to sign-in
   if (!user) {
     router.push('/sign-in');
     return null;
   }
 
-  // Only show onboarding UI if user has no role
   const existingRole = user.publicMetadata?.role as UserRole | undefined;
   if (existingRole) {
-    // This shouldn't happen due to useEffect, but show loader as fallback
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
       </div>
     );
   }
 
+  const roles = [
+    {
+      id: 'candidate' as UserRole,
+      label: "I'm looking for work",
+      sublabel: 'Candidate',
+      icon: Users,
+      benefits: [
+        'Apply to jobs with one click',
+        'Track application status in real time',
+        'Get notified at every stage',
+      ],
+    },
+    {
+      id: 'recruiter' as UserRole,
+      label: "I'm hiring talent",
+      sublabel: 'Recruiter',
+      icon: Briefcase,
+      benefits: [
+        'Post jobs and receive applications',
+        'AI resume scoring in seconds',
+        'Automated candidate communication',
+      ],
+    },
+  ];
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
-      <div className="max-w-2xl w-full">
-        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-              Welcome to SmartHire
-            </h1>
-            <p className="text-lg text-gray-600">
-              Please select your role to get started
-            </p>
-          </div>
+    <div className="relative min-h-screen flex flex-col items-center justify-center bg-white overflow-hidden px-4 py-16">
 
-          {/* Error Message */}
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-              <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-800">{error}</p>
+      {/* Background grid + glow — matching landing page */}
+      <div className="absolute inset-0 bg-grid opacity-[0.025] pointer-events-none" aria-hidden />
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden>
+        <div className="w-[700px] h-[350px] bg-gradient-to-r from-emerald-200/30 via-teal-200/35 to-emerald-200/30 rounded-full blur-[120px]" />
+      </div>
+
+      <div className="relative z-10 w-full max-w-2xl">
+
+        {/* Logo */}
+        <div className="flex justify-center mb-12">
+          <a href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center shadow-md shadow-emerald-600/25 group-hover:shadow-emerald-600/40 group-hover:bg-emerald-700 transition-all duration-300">
+              <svg width="17" height="17" viewBox="0 0 16 16" fill="none" aria-hidden>
+                <path d="M8 2L5 6H2L4.5 8.5L3.5 12L8 9.5L12.5 12L11.5 8.5L14 6H11L8 2Z" fill="white" strokeLinejoin="round" />
+              </svg>
             </div>
-          )}
-
-          {/* Role Selection */}
-          <div className="grid md:grid-cols-2 gap-4 mb-6">
-            {/* Candidate Option */}
-            <button
-              onClick={() => handleRoleSelection('candidate')}
-              disabled={isSaving}
-              className={`p-6 rounded-xl border-2 transition-all duration-200 text-left ${
-                selectedRole === 'candidate'
-                  ? 'border-emerald-600 bg-emerald-50 shadow-lg'
-                  : 'border-gray-200 hover:border-emerald-300 hover:bg-gray-50'
-              } ${isSaving ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-            >
-              <div className="flex items-start gap-4">
-                <div className={`p-3 rounded-lg ${
-                  selectedRole === 'candidate' ? 'bg-emerald-100' : 'bg-gray-100'
-                }`}>
-                  <Users className={`h-6 w-6 ${
-                    selectedRole === 'candidate' ? 'text-emerald-600' : 'text-gray-600'
-                  }`} />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    I'm a Candidate
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Looking for job opportunities and want to track my applications
-                  </p>
-                </div>
-              </div>
-            </button>
-
-            {/* Recruiter Option */}
-            <button
-              onClick={() => handleRoleSelection('recruiter')}
-              disabled={isSaving}
-              className={`p-6 rounded-xl border-2 transition-all duration-200 text-left ${
-                selectedRole === 'recruiter'
-                  ? 'border-emerald-600 bg-emerald-50 shadow-lg'
-                  : 'border-gray-200 hover:border-emerald-300 hover:bg-gray-50'
-              } ${isSaving ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-            >
-              <div className="flex items-start gap-4">
-                <div className={`p-3 rounded-lg ${
-                  selectedRole === 'recruiter' ? 'bg-emerald-100' : 'bg-gray-100'
-                }`}>
-                  <Briefcase className={`h-6 w-6 ${
-                    selectedRole === 'recruiter' ? 'text-emerald-600' : 'text-gray-600'
-                  }`} />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    I'm a Recruiter
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Hiring talent and want to manage job postings and candidates
-                  </p>
-                </div>
-              </div>
-            </button>
-          </div>
-
-          {/* Loading Indicator */}
-          {isSaving && (
-            <div className="flex items-center justify-center gap-2 text-emerald-600">
-              <Loader2 className="h-5 w-5 animate-spin" />
-              <span className="text-sm font-medium">Saving your selection...</span>
-            </div>
-          )}
+            <span className="font-bold text-xl tracking-tight text-gray-900">Smart<span className="text-emerald-600">Hire</span></span>
+          </a>
         </div>
+
+        {/* Heading */}
+        <div className="text-center mb-10">
+          <p className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700 text-[11px] uppercase tracking-[0.15em] font-semibold mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" aria-hidden />
+            Step 1 of 1
+          </p>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-3 leading-[1.1]">
+            How are you using{' '}
+            <span className="gradient-text">SmartHire?</span>
+          </h1>
+          <p className="text-gray-500 text-base max-w-sm mx-auto">
+            Your experience is personalized based on your role. This cannot be changed later.
+          </p>
+        </div>
+
+        {/* Error */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
+            <AlertCircle className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-red-700">{error}</p>
+          </div>
+        )}
+
+        {/* Role cards */}
+        <div className="grid sm:grid-cols-2 gap-4 mb-8">
+          {roles.map(({ id, label, sublabel, icon: Icon, benefits }) => {
+            const isSelected = selectedRole === id;
+            const isDisabled = isSaving && selectedRole !== id;
+
+            return (
+              <button
+                key={id}
+                onClick={() => handleRoleSelection(id)}
+                disabled={isSaving}
+                className={`
+                  group relative text-left rounded-2xl border-2 p-6 transition-all duration-300
+                  ease-[cubic-bezier(0.32,0.72,0,1)]
+                  ${isSelected
+                    ? 'border-emerald-500 bg-emerald-50/60 shadow-lg shadow-emerald-600/10'
+                    : 'border-gray-200 bg-white hover:border-emerald-300 hover:shadow-md hover:shadow-emerald-600/5 hover:-translate-y-0.5'
+                  }
+                  ${isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer active:scale-[0.98]'}
+                `}
+              >
+                {/* Selected checkmark */}
+                {isSelected && (
+                  <div className="absolute top-4 right-4">
+                    {isSaving
+                      ? <Loader2 className="h-4 w-4 animate-spin text-emerald-600" />
+                      : <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                    }
+                  </div>
+                )}
+
+                {/* Icon */}
+                <div className={`
+                  w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-colors duration-200
+                  ${isSelected ? 'bg-emerald-600 shadow-md shadow-emerald-600/25' : 'bg-gray-100 group-hover:bg-emerald-50'}
+                `}>
+                  <Icon className={`h-5 w-5 transition-colors duration-200 ${isSelected ? 'text-white' : 'text-gray-500 group-hover:text-emerald-600'}`} />
+                </div>
+
+                {/* Label */}
+                <p className="text-[10px] uppercase tracking-widest font-semibold text-emerald-600 mb-1">{sublabel}</p>
+                <h3 className="text-lg font-bold text-gray-900 mb-3 tracking-tight">{label}</h3>
+
+                {/* Benefits */}
+                <ul className="space-y-1.5">
+                  {benefits.map((b) => (
+                    <li key={b} className="flex items-center gap-2 text-sm text-gray-500">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden className="flex-shrink-0">
+                        <path d="M2 6L4.5 8.5L10 3" stroke="#059669" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Saving indicator */}
+        {isSaving && (
+          <div className="flex items-center justify-center gap-2 text-emerald-600 mb-6">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span className="text-sm font-medium">Setting up your account...</span>
+          </div>
+        )}
+
+        {/* Footer note */}
+        <p className="text-center text-xs text-gray-400">
+          By continuing you agree to our{' '}
+          <a href="/terms" className="underline hover:text-gray-600 transition-colors">Terms of Service</a>
+          {' '}and{' '}
+          <a href="/privacy" className="underline hover:text-gray-600 transition-colors">Privacy Policy</a>.
+        </p>
       </div>
     </div>
   );
 }
-

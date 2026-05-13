@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase-server';
 import { sendStatusEmail } from '@/lib/email';
 import { requireRole } from '@/lib/auth';
 import { JOB_EXPIRY_DAYS } from '@/lib/constants';
+import { scoreResume } from '@/lib/scoring-client';
 
 const pdfParse = require('pdf-parse');
 import mammoth from 'mammoth';
@@ -210,64 +211,39 @@ export async function POST(request: Request) {
         await supabase.from('jobs').update({ applicants_count: (jobData?.applicants_count || 0) + 1 }).eq('id', jobId);
         */
 
-        // 4. Auto-score the resume immediately (best-effort — does not block submission on failure)
-        try {
-            const backendUrl = process.env.BACKEND_URL?.replace(/\/$/, ''); // strip trailing slash
-            const apiKey = process.env.API_KEY;
+        // 4. Return response immediately — scoring runs in background (fire-and-forget)
+        // Candidate browser is unblocked; recruiter sees score after page refresh or retry.
+        const response = NextResponse.json({ success: true, application: applicationData });
 
-            if (backendUrl && apiKey) {
+        (async () => {
+            try {
                 const { data: jobScoreData } = await supabase
                     .from('jobs')
                     .select('job_description')
                     .eq('id', jobId)
                     .single();
 
-                if (jobScoreData?.job_description) {
-                    const controller = new AbortController();
-                    const scoringTimeout = setTimeout(() => controller.abort(), 30000);
+                if (!jobScoreData?.job_description) return;
 
-                    const scoreRes = await fetch(`${backendUrl}/score-single`, {
-                        method: 'POST',
-                        headers: {
-                            'X-API-Key': apiKey,
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            resume_text: resumeText ?? '',
-                            job_description: jobScoreData.job_description,
-                        }),
-                        signal: controller.signal,
-                    });
-
-                    clearTimeout(scoringTimeout);
-
-                    if (scoreRes.ok) {
-                        const { score, breakdown } = await scoreRes.json();
-                        const now = new Date().toISOString();
-                        await supabase.from('scores').upsert(
-                            [{ job_id: jobId, application_id: applicationData.id, score, breakdown: breakdown ?? null, scored_at: now }],
-                            { onConflict: 'job_id,application_id' }
-                        );
-                    } else {
-                        console.error('Auto-scoring backend error:', await scoreRes.text());
-                    }
-                }
-            }
-        } catch (scoringError) {
-            // Non-fatal: insert sentinel score of -1 so recruiter sees "Pending" with a retry button
-            console.error('Auto-scoring error (non-fatal):', scoringError);
-            try {
                 const now = new Date().toISOString();
+                const result = await scoreResume(resumeText ?? '', jobScoreData.job_description);
+
                 await supabase.from('scores').upsert(
-                    [{ job_id: jobId, application_id: applicationData.id, score: -1, scored_at: now }],
+                    [{
+                        job_id: jobId,
+                        application_id: applicationData.id,
+                        score: result?.score ?? -1,
+                        breakdown: result?.breakdown ?? null,
+                        scored_at: now,
+                    }],
                     { onConflict: 'job_id,application_id' }
                 );
-            } catch (sentinelError) {
-                console.error('Failed to insert pending sentinel score:', sentinelError);
+            } catch (err) {
+                console.error('Background scoring error (non-fatal):', err);
             }
-        }
+        })();
 
-        return NextResponse.json({ success: true, application: applicationData });
+        return response;
     } catch (error) {
         console.error('Application submission error:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

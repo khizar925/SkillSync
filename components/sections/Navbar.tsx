@@ -30,7 +30,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between px-5 py-2.5">
 
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2.5 group">
+          <a href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded-xl bg-green-600 flex items-center justify-center shadow-md shadow-green-600/30 group-hover:shadow-green-600/50 group-hover:bg-green-700 transition-all duration-300">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
                 <path d="M8 2L5 6H2L4.5 8.5L3.5 12L8 9.5L12.5 12L11.5 8.5L14 6H11L8 2Z"

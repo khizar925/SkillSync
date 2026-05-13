@@ -241,26 +241,26 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
 
       {/* Modal Container */}
-      <div className="relative z-[1000] w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-bottom-4 sm:zoom-in duration-300 mt-auto sm:mt-0">
+      <div className="relative z-[1000] w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-gray-200 overflow-hidden animate-in fade-in slide-in-from-bottom-4 sm:zoom-in duration-300 mt-auto sm:mt-0">
         {publicLinkStatus ? <div>
-          <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
+          <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-white">
             <div className="flex items-center gap-3">
               <div className="bg-green-100 p-2 rounded-xl">
                 <BrainCircuit className="h-5 w-5 text-green-600" />
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 font-serif tracking-tight">Public Link</h2>
+              <h2 className="text-2xl font-bold text-gray-900 font-serif tracking-tight">Public Link</h2>
             </div>
             <button
               onClick={handleOnCloseLinkModal}
-              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               aria-label="Close modal"
             >
-              <X className="h-5 w-5 text-slate-500" />
+              <X className="h-5 w-5 text-gray-500" />
             </button>
           </div>
           <div className="p-6 space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-900 mb-2">
+              <label className="block text-sm font-semibold text-gray-900 mb-2">
                 Your job posting is live! Share this link:
               </label>
               <div className="flex items-center gap-2">
@@ -268,7 +268,7 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
                   type="text"
                   readOnly
                   value={jobLink}
-                  className="flex-1 px-4 py-2.5 border border-slate-300 rounded-lg bg-slate-50 text-slate-700 font-mono text-sm"
+                  className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-mono text-sm"
                 />
                 <Button
                   type="button"
@@ -286,19 +286,19 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
           </div>
         </div> : <div>
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
+          <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-white">
             <div className="flex items-center gap-3">
-              <div className="bg-primary-600/10 p-2 rounded-xl">
-                <BrainCircuit className="h-5 w-5 text-primary-600" />
+              <div className="bg-emerald-600/10 p-2 rounded-xl">
+                <BrainCircuit className="h-5 w-5 text-emerald-600" />
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 font-serif tracking-tight">Post a New Job</h2>
+              <h2 className="text-2xl font-bold text-gray-900 font-serif tracking-tight">Post a New Job</h2>
             </div>
             <button
               onClick={handleOnClosePostModal}
-              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               aria-label="Close modal"
             >
-              <X className="h-5 w-5 text-slate-500" />
+              <X className="h-5 w-5 text-gray-500" />
             </button>
           </div>
 
@@ -325,7 +325,7 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
               )}
               {/* Job Title */}
               <div>
-                <label htmlFor="jobTitle" className="block text-sm font-semibold text-slate-900 mb-2">
+                <label htmlFor="jobTitle" className="block text-sm font-semibold text-gray-900 mb-2">
                   Job Title *
                 </label>
                 <input
@@ -335,14 +335,14 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
                   value={formData.jobTitle}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   placeholder="e.g., Senior Software Engineer"
                 />
               </div>
 
               {/* Company Name */}
               <div>
-                <label htmlFor="companyName" className="block text-sm font-semibold text-slate-900 mb-2">
+                <label htmlFor="companyName" className="block text-sm font-semibold text-gray-900 mb-2">
                   Company Name *
                 </label>
                 <input
@@ -352,14 +352,14 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
                   value={formData.companyName}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   placeholder="e.g., Tech Corp Inc."
                 />
               </div>
 
               {/* Location */}
               <div>
-                <label htmlFor="location" className="block text-sm font-semibold text-slate-900 mb-2">
+                <label htmlFor="location" className="block text-sm font-semibold text-gray-900 mb-2">
                   Location *
                 </label>
                 <input
@@ -369,14 +369,14 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
                   value={formData.location}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   placeholder="e.g., San Francisco, CA"
                 />
               </div>
 
               {/* Employment Type */}
               <div>
-                <label htmlFor="employmentType" className="block text-sm font-semibold text-slate-900 mb-2">
+                <label htmlFor="employmentType" className="block text-sm font-semibold text-gray-900 mb-2">
                   Employment Type *
                 </label>
                 <select
@@ -385,7 +385,7 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
                   value={formData.employmentType}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                 >
                   <option value="">Select employment type</option>
                   <option value="full-time">Full-time</option>
@@ -397,7 +397,7 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
 
               {/* Experience Level */}
               <div>
-                <label htmlFor="experienceLevel" className="block text-sm font-semibold text-slate-900 mb-2">
+                <label htmlFor="experienceLevel" className="block text-sm font-semibold text-gray-900 mb-2">
                   Experience Level *
                 </label>
                 <select
@@ -406,7 +406,7 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
                   value={formData.experienceLevel}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                 >
                   <option value="">Select experience level</option>
                   <option value="entry">Entry Level</option>
@@ -418,7 +418,7 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
 
               {/* Skills */}
               <div>
-                <label htmlFor="skills" className="block text-sm font-semibold text-slate-900 mb-2">
+                <label htmlFor="skills" className="block text-sm font-semibold text-gray-900 mb-2">
                   Required Skills *
                 </label>
                 <input
@@ -428,17 +428,17 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
                   value={formData.skills}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   placeholder="e.g., React, TypeScript, Node.js (Min. 3)"
                 />
-                <p className="mt-1.5 text-xs text-slate-500">
+                <p className="mt-1.5 text-xs text-gray-500">
                   Separate skills with commas. At least 3 are required for AI matching.
                 </p>
               </div>
 
               {/* Job Description */}
               <div>
-                <label htmlFor="jobDescription" className="block text-sm font-semibold text-slate-900 mb-2">
+                <label htmlFor="jobDescription" className="block text-sm font-semibold text-gray-900 mb-2">
                   Job Description *
                 </label>
                 <textarea
@@ -448,14 +448,14 @@ export function PostJobModal({ isOpen, onClose, onJobposted }: PostJobModalProps
                   onChange={handleChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
                   placeholder="Describe the job responsibilities, requirements, and what you're looking for..."
                 />
               </div>
             </div>
 
             {/* Footer */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 p-6 border-t border-gray-100 bg-gray-50">
               <Button
                 type="submit"
                 variant="primary"

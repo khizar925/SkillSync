@@ -134,7 +134,7 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
             await updateStatus.mutateAsync({ applicationId, status, feedback, interviewDate, interviewTime, interviewType, interviewLink });
             return true;
         } catch {
-            alert('Failed to update status');
+            setRetryError({ id: applicationId, message: 'Failed to update status. Try again.' });
             return false;
         }
     };
@@ -260,9 +260,9 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
 
     const getRankStyle = (i: number) => {
         if (i === 0) return 'bg-amber-100 text-amber-700 border border-amber-200';
-        if (i === 1) return 'bg-slate-100 text-slate-600 border border-slate-200';
+        if (i === 1) return 'bg-gray-100 text-gray-600 border border-gray-200';
         if (i === 2) return 'bg-orange-50 text-orange-700 border border-orange-100';
-        return 'bg-white text-slate-400 border border-slate-100';
+        return 'bg-white text-gray-400 border border-gray-100';
     };
 
     // ── Score breakdown tooltip content ──────────────────────────────────────
@@ -293,7 +293,7 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
 
         return (
             <div className="w-64 space-y-3">
-                <p className="text-[11px] font-bold text-slate-200 uppercase tracking-widest border-b border-white/10 pb-2">
+                <p className="text-[11px] font-bold text-gray-200 uppercase tracking-widest border-b border-white/10 pb-2">
                     Score Breakdown
                 </p>
                 {bars.map(({ label, value, description, color }) => (
@@ -322,54 +322,52 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
 
     // ── Render ────────────────────────────────────────────────────────────────
     return (
-        <div className="min-h-screen bg-slate-50 p-2 md:p-3">
-            <div className="max-w-7xl mx-auto">
+        <div className="space-y-6">
+            <div>
 
                 {/* Header */}
-                <div className="mb-8">
-                    <button onClick={() => router.back()} className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4 group">
-                        <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-                        Back to Dashboard
-                    </button>
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                        <div>
-                            <h1 className="text-3xl font-bold text-slate-900 mb-2">Applications</h1>
-                            {job && (
-                                <p className="text-lg text-slate-600">
-                                    Candidates for <span className="font-semibold text-primary-600">{job.job_title}</span>
-                                </p>
-                            )}
-                        </div>
-                        <div className="bg-white px-4 py-2 rounded-lg border border-slate-200 flex items-center gap-3">
-                            <Users className="h-5 w-5 text-slate-400" />
-                            <span className="text-sm font-semibold text-slate-700">
-                                {applications.length} {applications.length === 1 ? 'Applicant' : 'Applicants'}
-                            </span>
-                        </div>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <button onClick={() => router.back()} className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-700 transition-colors mb-2 group">
+                            <ArrowLeft className="h-3 w-3 group-hover:-translate-x-0.5 transition-transform" />
+                            Back
+                        </button>
+                        <h1 className="text-xl font-bold text-gray-900 tracking-tight">Applications</h1>
+                        {job && (
+                            <p className="text-sm text-gray-400 mt-0.5">
+                                Candidates for <span className="font-semibold text-emerald-600">{job.job_title}</span>
+                            </p>
+                        )}
+                    </div>
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-100 rounded-xl text-sm self-start md:self-auto">
+                        <Users className="h-4 w-4 text-emerald-600" />
+                        <span className="font-semibold text-gray-700">
+                            {applications.length} {applications.length === 1 ? 'applicant' : 'applicants'}
+                        </span>
                     </div>
                 </div>
 
                 {/* Filters */}
                 {!isLoading && !error && applications.length > 0 && (
-                    <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="bg-white p-4 rounded-2xl border border-gray-100 mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                             <input type="text" placeholder="Search by name or email..." value={searchQuery}
                                 onChange={e => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                                className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all" />
+                                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 transition-all" />
                         </div>
                         <div className="flex items-center gap-2">
-                            <Filter className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                            <Filter className="h-4 w-4 text-gray-400 flex-shrink-0" />
                             <select value={educationFilter} onChange={e => { setEducationFilter(e.target.value); setCurrentPage(1); }}
-                                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all appearance-none">
+                                className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all appearance-none">
                                 <option value="all">All Education Levels</option>
                                 {uniqueEducationLevels.map(l => <option key={l} value={l}>{l}</option>)}
                             </select>
                         </div>
                         <div className="flex items-center gap-2">
-                            <CheckCircle className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                            <CheckCircle className="h-4 w-4 text-gray-400 flex-shrink-0" />
                             <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all appearance-none">
+                                className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all appearance-none">
                                 <option value="all">All Statuses</option>
                                 <option value="pending">Pending</option>
                                 <option value="review">Under Review</option>
@@ -379,11 +377,11 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                             </select>
                         </div>
                         <div className="flex items-center gap-2">
-                            <ArrowUpDown className="h-4 w-4 text-slate-400 flex-shrink-0" />
-                            <div className="flex bg-slate-50 p-1 rounded-xl border border-slate-200 flex-1">
+                            <ArrowUpDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                            <div className="flex bg-gray-50 p-1 rounded-xl border border-gray-200 flex-1">
                                 {(['score', 'experience'] as const).map(key => (
                                     <button key={key} onClick={() => toggleSort(key)}
-                                        className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-bold transition-all ${sortConfigs.some(c => c.key === key) ? 'bg-white shadow-sm text-primary-600 border border-slate-100' : 'text-slate-500 hover:bg-white/50'}`}>
+                                        className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-bold transition-all ${sortConfigs.some(c => c.key === key) ? 'bg-white shadow-sm text-emerald-600 border border-gray-100' : 'text-gray-500 hover:bg-white/50'}`}>
                                         {key === 'score' ? <Award className="h-3 w-3" /> : <Briefcase className="h-3 w-3" />}
                                         {sortConfigs.find(c => c.key === key)?.order === 'asc' ? '↑' : sortConfigs.find(c => c.key === key)?.order === 'desc' ? '↓' : ''}
                                         {key === 'score' ? 'Score' : 'Exp.'}
@@ -396,9 +394,9 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
 
                 {/* Content */}
                 {isLoading ? (
-                    <div className="flex flex-col items-center justify-center py-24 gap-4 bg-white rounded-2xl border border-slate-200">
-                        <Loader2 className="h-10 w-10 animate-spin text-primary-600" />
-                        <p className="text-slate-500 font-medium">Loading applicant data...</p>
+                    <div className="flex flex-col items-center justify-center py-24 gap-4 bg-white rounded-2xl border border-gray-200">
+                        <Loader2 className="h-10 w-10 animate-spin text-emerald-600" />
+                        <p className="text-gray-500 font-medium">Loading applicant data...</p>
                     </div>
                 ) : error ? (
                     <div className="bg-red-50 border border-red-200 p-8 rounded-2xl text-center">
@@ -408,16 +406,16 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                         <Button onClick={() => refetch()} variant="outline" className="bg-white">Retry Connection</Button>
                     </div>
                 ) : applications.length === 0 ? (
-                    <div className="text-center py-24 bg-white rounded-2xl border border-slate-200">
-                        <Users className="h-16 w-16 text-slate-200 mx-auto mb-4" />
-                        <h3 className="text-xl font-bold text-slate-900 mb-2">No Applications Yet</h3>
-                        <p className="text-slate-500 max-w-md mx-auto">This job posting hasn&apos;t received any applications yet.</p>
+                    <div className="text-center py-24 bg-white rounded-2xl border border-gray-200">
+                        <Users className="h-16 w-16 text-gray-200 mx-auto mb-4" />
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">No Applications Yet</h3>
+                        <p className="text-gray-500 max-w-md mx-auto">This job posting hasn&apos;t received any applications yet.</p>
                     </div>
                 ) : filteredAndSorted.length === 0 ? (
-                    <div className="text-center py-24 bg-white rounded-2xl border border-slate-200">
-                        <Search className="h-16 w-16 text-slate-200 mx-auto mb-4" />
-                        <h3 className="text-xl font-bold text-slate-900 mb-2">No Matches Found</h3>
-                        <p className="text-slate-500 max-w-md mx-auto">Adjust your search or filters to see more candidates.</p>
+                    <div className="text-center py-24 bg-white rounded-2xl border border-gray-200">
+                        <Search className="h-16 w-16 text-gray-200 mx-auto mb-4" />
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">No Matches Found</h3>
+                        <p className="text-gray-500 max-w-md mx-auto">Adjust your search or filters to see more candidates.</p>
                     </div>
                 ) : (
                     <>
@@ -439,25 +437,25 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                 const isUpdating = updateStatus.isPending && updateStatus.variables?.applicationId === app.id;
                                 const isRetrying = retryingId === app.id;
                                 return (
-                                    <div key={app.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3">
+                                    <div key={app.id} className="bg-white rounded-2xl border border-gray-100 p-4 space-y-3">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-3">
                                                 <span className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold flex-shrink-0 ${getRankStyle(globalIdx)}`}>{globalIdx + 1}</span>
                                                 <div>
-                                                    <p className="font-bold text-slate-900 text-sm">{app.full_name}</p>
-                                                    <p className="text-xs text-slate-500">{app.email}</p>
+                                                    <p className="font-bold text-gray-900 text-sm">{app.full_name}</p>
+                                                    <p className="text-xs text-gray-500">{app.email}</p>
                                                 </div>
                                             </div>
-                                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-wider ${
+                                            <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border capitalize ${
                                                 app.status === 'shortlisted' ? 'bg-sky-50 text-sky-700 border-sky-100' :
                                                 app.status === 'rejected' ? 'bg-red-50 text-red-700 border-red-100' :
                                                 app.status === 'hired' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' :
                                                 'bg-blue-50 text-blue-700 border-blue-100'
                                             }`}>{app.status}</span>
                                         </div>
-                                        <div className="flex items-center gap-4 text-xs text-slate-600">
-                                            <span className="flex items-center gap-1"><Briefcase className="h-3.5 w-3.5 text-slate-400" />{app.years_of_experience} yrs</span>
-                                            <span className="flex items-center gap-1"><GraduationCap className="h-3.5 w-3.5 text-slate-400" />{app.education_level}</span>
+                                        <div className="flex items-center gap-4 text-xs text-gray-600">
+                                            <span className="flex items-center gap-1"><Briefcase className="h-3.5 w-3.5 text-gray-400" />{app.years_of_experience} yrs</span>
+                                            <span className="flex items-center gap-1"><GraduationCap className="h-3.5 w-3.5 text-gray-400" />{app.education_level}</span>
                                             {hasScore && (
                                                 <span className="flex items-center gap-1">
                                                     <Award className="h-3.5 w-3.5 text-indigo-400" />
@@ -470,7 +468,7 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                                                     expandedBreakdownId === app.id ? null : app.id
                                                                 );
                                                             }}
-                                                            className="p-1 rounded-md text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 transition-colors"
+                                                            className="p-1 rounded-md text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 transition-colors"
                                                         >
                                                             <Info className="h-3.5 w-3.5" />
                                                         </button>
@@ -480,7 +478,7 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                             {isPending && (
                                                 <span className="flex items-center gap-1">
                                                     <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-200 uppercase">Pending</span>
-                                                    <button onClick={() => handleRetryScore(app.id)} disabled={isRetrying} className="p-1 bg-slate-100 rounded text-slate-500 hover:text-amber-600 disabled:opacity-50">
+                                                    <button onClick={() => handleRetryScore(app.id)} disabled={isRetrying} className="p-1 bg-gray-100 rounded text-gray-500 hover:text-amber-600 disabled:opacity-50">
                                                         {isRetrying ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
                                                     </button>
                                                 </span>
@@ -497,18 +495,18 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                             const quality = (v: number) =>
                                                 v >= 75 ? 'Strong' : v >= 50 ? 'Good' : v >= 30 ? 'Partial' : 'Weak';
                                             return (
-                                                <div className="rounded-xl bg-slate-50 border border-slate-200 p-3 space-y-2">
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Score Breakdown</p>
+                                                <div className="rounded-xl bg-gray-50 border border-gray-200 p-3 space-y-2">
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Score Breakdown</p>
                                                     {bars.map(({ label, value, color }) => (
                                                         <div key={label} className="space-y-0.5">
                                                             <div className="flex justify-between items-center">
-                                                                <span className="text-xs font-semibold text-slate-700">{label}</span>
-                                                                <span className="text-xs text-slate-500">
+                                                                <span className="text-xs font-semibold text-gray-700">{label}</span>
+                                                                <span className="text-xs text-gray-500">
                                                                     {value.toFixed(0)}/100
-                                                                    <span className="ml-1 text-[10px] text-slate-400">({quality(value)})</span>
+                                                                    <span className="ml-1 text-[10px] text-gray-400">({quality(value)})</span>
                                                                 </span>
                                                             </div>
-                                                            <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                                                            <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
                                                                 <div className={`h-full ${color} rounded-full`} style={{ width: `${value}%` }} />
                                                             </div>
                                                         </div>
@@ -517,8 +515,8 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                             );
                                         })()}
 
-                                        <div className="flex items-center justify-end gap-2 pt-1 border-t border-slate-100">
-                                            <a href={`/api/resume?path=${encodeURIComponent(app.resume_url)}`} target="_blank" rel="noopener noreferrer" title="View Resume" className="p-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors">
+                                        <div className="flex items-center justify-end gap-2 pt-1 border-t border-gray-100">
+                                            <a href={`/api/resume?path=${encodeURIComponent(app.resume_url)}`} target="_blank" rel="noopener noreferrer" title="View Resume" className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors">
                                                 <FileText className="h-4 w-4" />
                                             </a>
                                             {app.status === 'pending' && (
@@ -551,17 +549,17 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                         </div>
 
                         {/* Desktop table view */}
-                        <div className="hidden sm:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+                        <div className="hidden sm:block bg-white rounded-2xl border border-gray-100 overflow-hidden mb-8">
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left border-collapse">
                                     <thead>
-                                        <tr className="bg-slate-50/50 border-b border-slate-200">
+                                        <tr className="bg-gray-50/50 border-b border-gray-200">
                                             {['Rank', 'Candidate', 'Phone', 'Status', 'Score', 'Experience', 'Education', 'Actions'].map(h => (
-                                                <th key={h} className={`px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest ${h === 'Actions' ? 'text-right' : ''}`}>{h}</th>
+                                                <th key={h} className={`px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest ${h === 'Actions' ? 'text-right' : ''}`}>{h}</th>
                                             ))}
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-slate-100">
+                                    <tbody className="divide-y divide-gray-100">
                                         {paginated.map((app: Application, pageIdx) => {
                                             const globalIdx = (currentPage - 1) * itemsPerPage + pageIdx;
                                             const score = app.scores?.[0]?.score;
@@ -571,7 +569,7 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                             const isRetrying = retryingId === app.id;
 
                                             return (
-                                                <tr key={app.id} className="hover:bg-slate-50/50 transition-colors">
+                                                <tr key={app.id} className="hover:bg-gray-50/50 transition-colors">
                                                     <td className="px-6 py-4">
                                                         <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg text-sm font-bold ${getRankStyle(globalIdx)}`}>
                                                             {globalIdx + 1}
@@ -579,23 +577,23 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <div className="flex items-center gap-3">
-                                                            <div className="h-10 w-10 rounded-full bg-primary-50 flex items-center justify-center flex-shrink-0">
-                                                                <User className="h-5 w-5 text-primary-600" />
+                                                            <div className="h-10 w-10 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                                                                <User className="h-5 w-5 text-emerald-600" />
                                                             </div>
                                                             <div>
-                                                                <p className="font-bold text-slate-900">{app.full_name}</p>
-                                                                <p className="text-xs text-slate-500">{app.email}</p>
+                                                                <p className="font-bold text-gray-900">{app.full_name}</p>
+                                                                <p className="text-xs text-gray-500">{app.email}</p>
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <div className="flex items-center gap-2 text-slate-700">
-                                                            <Phone className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                                                        <div className="flex items-center gap-2 text-gray-700">
+                                                            <Phone className="h-4 w-4 text-gray-400 flex-shrink-0" />
                                                             <span className="font-medium text-sm">{app.phone}</span>
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-wider ${
+                                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-semibold border capitalize ${
                                                             app.status === 'shortlisted' ? 'bg-sky-50 text-sky-700 border-sky-100' :
                                                             app.status === 'rejected' ? 'bg-red-50 text-red-700 border-red-100' :
                                                             app.status === 'hired' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' :
@@ -611,18 +609,18 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                                                     {score!.toFixed(1)}
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
-                                                                    <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                                                    <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                                                         <div className="h-full bg-indigo-500 transition-all duration-700" style={{ width: `${score}%` }} />
                                                                     </div>
                                                                     {app.scores?.[0]?.breakdown && (
                                                                         <Tooltip>
                                                                             <TooltipTrigger asChild>
-                                                                                <button className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-indigo-500 transition-colors w-fit">
+                                                                                <button className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-indigo-500 transition-colors w-fit">
                                                                                     <Info className="h-3 w-3" />
                                                                                     <span>How scored?</span>
                                                                                 </button>
                                                                             </TooltipTrigger>
-                                                                            <TooltipContent side="right" className="bg-slate-900 border-slate-700 p-3">
+                                                                            <TooltipContent side="right" className="bg-gray-900 border-gray-700 p-3">
                                                                                 <ScoreBreakdownTooltip breakdown={app.scores[0].breakdown} />
                                                                             </TooltipContent>
                                                                         </Tooltip>
@@ -639,7 +637,7 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                                                         onClick={() => handleRetryScore(app.id)}
                                                                         disabled={isRetrying}
                                                                         title="Retry scoring"
-                                                                        className="p-1.5 bg-slate-100 text-slate-500 rounded-lg hover:bg-amber-50 hover:text-amber-600 transition-colors disabled:opacity-50"
+                                                                        className="p-1.5 bg-gray-100 text-gray-500 rounded-lg hover:bg-amber-50 hover:text-amber-600 transition-colors disabled:opacity-50"
                                                                     >
                                                                         {isRetrying
                                                                             ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -654,25 +652,25 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                                                 )}
                                                             </div>
                                                         ) : (
-                                                            <span className="text-slate-300 text-xs italic">Not Ranked</span>
+                                                            <span className="text-gray-300 text-xs italic">Not Ranked</span>
                                                         )}
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <div className="flex items-center gap-2 text-slate-700">
-                                                            <Briefcase className="h-4 w-4 text-slate-400" />
+                                                        <div className="flex items-center gap-2 text-gray-700">
+                                                            <Briefcase className="h-4 w-4 text-gray-400" />
                                                             <span className="font-medium text-sm">{app.years_of_experience} Yrs</span>
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <div className="flex items-center gap-2 text-slate-700">
-                                                            <GraduationCap className="h-4 w-4 text-slate-400" />
+                                                        <div className="flex items-center gap-2 text-gray-700">
+                                                            <GraduationCap className="h-4 w-4 text-gray-400" />
                                                             <span className="font-medium text-sm capitalize">{app.education_level}</span>
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <div className="flex items-center justify-end gap-2">
                                                             <a href={`/api/resume?path=${encodeURIComponent(app.resume_url)}`} target="_blank" rel="noopener noreferrer" title="View Resume"
-                                                                className="p-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors">
+                                                                className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors">
                                                                 <FileText className="h-4 w-4" />
                                                             </a>
                                                             {app.status === 'pending' && (
@@ -706,8 +704,8 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                                             {app.status === 'rejected' && app.rejection_feedback && (
                                                                 <div className="relative group/tip">
                                                                     <AlertCircle className="h-5 w-5 text-red-400 cursor-help" />
-                                                                    <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-slate-900 text-white text-xs rounded-xl opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
-                                                                        <p className="font-bold mb-1 uppercase tracking-widest text-[10px] text-slate-400">Rejection Feedback</p>
+                                                                    <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-gray-900 text-white text-xs rounded-xl opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
+                                                                        <p className="font-bold mb-1 uppercase tracking-widest text-[10px] text-gray-400">Rejection Feedback</p>
                                                                         <p className="italic leading-relaxed">&quot;{app.rejection_feedback}&quot;</p>
                                                                     </div>
                                                                 </div>
@@ -770,15 +768,15 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                     <CheckCircle className="h-8 w-8" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-slate-900">{isReschedule ? 'Interview Rescheduled!' : 'Interview Scheduled!'}</h3>
-                                    <p className="text-sm text-slate-500 mt-1">Candidate notified by email. Add this to your calendar:</p>
+                                    <h3 className="text-xl font-bold text-gray-900">{isReschedule ? 'Interview Rescheduled!' : 'Interview Scheduled!'}</h3>
+                                    <p className="text-sm text-gray-500 mt-1">Candidate notified by email. Add this to your calendar:</p>
                                 </div>
                                 <a
                                     href={confirmedCalUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={e => e.stopPropagation()}
-                                    className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border-2 border-slate-200 rounded-xl hover:border-sky-400 hover:bg-sky-50 transition-all text-sm font-semibold text-slate-700 hover:text-sky-700"
+                                    className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border-2 border-gray-200 rounded-xl hover:border-sky-400 hover:bg-sky-50 transition-all text-sm font-semibold text-gray-700 hover:text-sky-700"
                                 >
                                     <svg className="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24" fill="none">
                                         <rect width="24" height="24" rx="4" fill="#4285F4"/>
@@ -804,8 +802,8 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                         {isReschedule ? <CalendarClock className="h-5 w-5" /> : <Calendar className="h-5 w-5" />}
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-slate-900">{isReschedule ? 'Reschedule Interview' : 'Schedule Interview'}</h3>
-                                        <p className="text-sm text-slate-500">Candidate will be notified by email</p>
+                                        <h3 className="text-xl font-bold text-gray-900">{isReschedule ? 'Reschedule Interview' : 'Schedule Interview'}</h3>
+                                        <p className="text-sm text-gray-500">Candidate will be notified by email</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5 mb-4">
@@ -814,7 +812,7 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                 </div>
                                 <div className="space-y-4">
                                     <div className="space-y-1.5">
-                                        <label className="text-sm font-semibold text-slate-700">Interview Format</label>
+                                        <label className="text-sm font-semibold text-gray-700">Interview Format</label>
                                         <div className="grid grid-cols-2 gap-2">
                                             {([
                                                 { value: 'phone_call', label: 'Phone Call', icon: '📞' },
@@ -822,7 +820,7 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                             ] as const).map(opt => (
                                                 <button key={opt.value} type="button"
                                                     onClick={() => { setInterviewType(opt.value); setScheduleError(null); }}
-                                                    className={`flex flex-col items-center gap-1 py-3 px-2 rounded-xl border text-xs font-semibold transition-all ${interviewType === opt.value ? 'border-sky-500 bg-sky-50 text-sky-700' : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'}`}>
+                                                    className={`flex flex-col items-center gap-1 py-3 px-2 rounded-xl border text-xs font-semibold transition-all ${interviewType === opt.value ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'}`}>
                                                     <span className="text-lg">{opt.icon}</span>
                                                     {opt.label}
                                                 </button>
@@ -831,28 +829,28 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                     </div>
                                     {interviewType === 'on_site' && (
                                         <div className="space-y-1.5">
-                                            <label className="text-sm font-semibold text-slate-700">Interview Location</label>
+                                            <label className="text-sm font-semibold text-gray-700">Interview Location</label>
                                             <input type="text" value={interviewAddress}
                                                 onChange={e => { setInterviewAddress(e.target.value); setScheduleError(null); }}
                                                 placeholder="e.g. 123 Main Street, Lahore"
-                                                className="w-full h-11 px-4 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" />
+                                                className="w-full h-11 px-4 border border-gray-200 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400" />
                                         </div>
                                     )}
                                     <div className="space-y-1.5">
-                                        <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                                            <Calendar className="h-4 w-4 text-slate-400" /> Interview Date
+                                        <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                                            <Calendar className="h-4 w-4 text-gray-400" /> Interview Date
                                         </label>
                                         <input
                                             type="date"
                                             value={interviewDate}
                                             min={today}
                                             onChange={e => { setInterviewDate(e.target.value); setScheduleError(null); }}
-                                            className="w-full h-11 px-4 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                                            className="w-full h-11 px-4 border border-gray-200 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400"
                                         />
                                     </div>
                                     <div className="space-y-1.5">
-                                        <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                                            <Clock className="h-4 w-4 text-slate-400" /> Time Slot
+                                        <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                                            <Clock className="h-4 w-4 text-gray-400" /> Time Slot
                                         </label>
                                         <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto pr-1">
                                             {TIME_SLOTS.map(slot => {
@@ -862,7 +860,7 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                                                         key={slot}
                                                         disabled={disabled}
                                                         onClick={() => { setInterviewTime(slot); setScheduleError(null); }}
-                                                        className={`py-2 px-1 rounded-lg text-xs font-semibold border transition-all ${disabled ? 'border-slate-100 text-slate-300 bg-slate-50 cursor-not-allowed' : interviewTime === slot ? 'border-sky-500 bg-sky-50 text-sky-700' : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'}`}
+                                                        className={`py-2 px-1 rounded-lg text-xs font-semibold border transition-all ${disabled ? 'border-gray-100 text-gray-300 bg-gray-50 cursor-not-allowed' : interviewTime === slot ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'}`}
                                                     >
                                                         {formatTime(slot)}
                                                     </button>
@@ -890,15 +888,15 @@ export default function JobApplicationsPage({ params }: { params: Promise<{ id: 
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsRejectionModalOpen(false)} />
                     <div className="relative bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-md p-6 overflow-hidden mt-auto sm:mt-0">
                         <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-xl font-bold text-slate-900">Provide Feedback</h3>
-                            <button onClick={() => setIsRejectionModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-lg">
+                            <h3 className="text-xl font-bold text-gray-900">Provide Feedback</h3>
+                            <button onClick={() => setIsRejectionModalOpen(false)} className="p-2 hover:bg-gray-100 rounded-lg">
                                 <ArrowLeft className="h-5 w-5 rotate-180" />
                             </button>
                         </div>
                         <div className="space-y-4">
-                            <p className="text-sm text-slate-600">Please provide a reason for rejection. This feedback will be shared with the candidate.</p>
+                            <p className="text-sm text-gray-600">Please provide a reason for rejection. This feedback will be shared with the candidate.</p>
                             <textarea value={rejectionReason} onChange={e => { setRejectionReason(e.target.value); setRejectionError(null); }}
-                                className={`w-full p-4 border rounded-xl h-32 resize-none focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${rejectionError ? 'border-red-500' : 'border-slate-200'}`}
+                                className={`w-full p-4 border rounded-xl h-32 resize-none focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${rejectionError ? 'border-red-500' : 'border-gray-200'}`}
                                 placeholder="e.g., Lacks required experience in React..." />
                             {rejectionError && <p className="text-sm text-red-600 font-medium">{rejectionError}</p>}
                             <div className="flex gap-3 pt-2">

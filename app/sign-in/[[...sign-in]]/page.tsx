@@ -24,7 +24,6 @@ export default function SignInPage() {
             <div className="flex items-center justify-center w-full lg:w-1/2 bg-gray-50">
                 <SignIn
                     withSignUp={true}
-                    fallbackRedirectUrl="/onboarding"
                     appearance={{
                         elements: {
                             footer: { display: 'none' }

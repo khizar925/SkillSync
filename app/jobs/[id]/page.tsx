@@ -193,7 +193,7 @@ export default function JobPage({ params }: Props) {
     if (error || !jobData) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 max-w-md w-full">
+                <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 max-w-md w-full">
                     <div className="flex items-start gap-3">
                         <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                         <div className="flex-1">
@@ -218,7 +218,7 @@ export default function JobPage({ params }: Props) {
             <PublicNavbar />
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pt-20 md:pt-24">
                 {/* Header */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-6">
+                <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 mb-6">
                     <div className="flex flex-wrap items-start gap-3 mb-4">
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold flex-shrink-0 ${jobData.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
                             {jobData.status === 'active' ? 'Active' : 'Closed'}
@@ -248,7 +248,7 @@ export default function JobPage({ params }: Props) {
                 </div>
 
                 {/* Tabs */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-100 mb-6 overflow-hidden">
                     <div className="flex border-b border-gray-200">
                         {(['overview', 'application'] as const).map(tab => (
                             <button
@@ -264,7 +264,7 @@ export default function JobPage({ params }: Props) {
 
                 {/* Overview */}
                 {activeTab === 'overview' && (
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-6">
+                    <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 mb-6">
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">Job Description</h2>
                         <div className="prose prose-gray max-w-none">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>{jobData.job_description}</ReactMarkdown>
@@ -274,7 +274,7 @@ export default function JobPage({ params }: Props) {
 
                 {/* Application */}
                 {activeTab === 'application' && (
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-6">
+                    <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 mb-6">
                         {hasApplied ? (
                             <div className="text-center py-12">
                                 <div className="h-20 w-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -300,7 +300,7 @@ export default function JobPage({ params }: Props) {
                                     <div>
                                         <label htmlFor="name" className="block text-sm font-semibold text-gray-900 mb-2">Name *</label>
                                         <input type="text" id="name" name="name" value={formData.name} onChange={handleInputChange}
-                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${formErrors.name ? 'border-red-300' : 'border-gray-300'}`}
+                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 focus:border-transparent ${formErrors.name ? 'border-red-300' : 'border-gray-300'}`}
                                             placeholder="Enter your full name" />
                                         {formErrors.name && <p className="mt-1 text-sm text-red-600">{formErrors.name}</p>}
                                     </div>
@@ -309,7 +309,7 @@ export default function JobPage({ params }: Props) {
                                     <div>
                                         <label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-2">Email *</label>
                                         <input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange}
-                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${formErrors.email ? 'border-red-300' : 'border-gray-300'}`}
+                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 focus:border-transparent ${formErrors.email ? 'border-red-300' : 'border-gray-300'}`}
                                             placeholder="Enter your email address" />
                                         {formErrors.email && <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>}
                                     </div>
@@ -318,7 +318,7 @@ export default function JobPage({ params }: Props) {
                                     <div>
                                         <label htmlFor="phoneNumber" className="block text-sm font-semibold text-gray-900 mb-2">Phone Number *</label>
                                         <input type="tel" id="phoneNumber" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange}
-                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${formErrors.phoneNumber ? 'border-red-300' : 'border-gray-300'}`}
+                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 focus:border-transparent ${formErrors.phoneNumber ? 'border-red-300' : 'border-gray-300'}`}
                                             placeholder="Enter your phone number" />
                                         {formErrors.phoneNumber && <p className="mt-1 text-sm text-red-600">{formErrors.phoneNumber}</p>}
                                     </div>
@@ -327,7 +327,7 @@ export default function JobPage({ params }: Props) {
                                     <div>
                                         <label htmlFor="address" className="block text-sm font-semibold text-gray-900 mb-2">Address *</label>
                                         <textarea id="address" name="address" value={formData.address} onChange={handleInputChange} rows={3}
-                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none ${formErrors.address ? 'border-red-300' : 'border-gray-300'}`}
+                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 focus:border-transparent resize-none ${formErrors.address ? 'border-red-300' : 'border-gray-300'}`}
                                             placeholder="Enter your address" />
                                         {formErrors.address && <p className="mt-1 text-sm text-red-600">{formErrors.address}</p>}
                                     </div>
@@ -336,7 +336,7 @@ export default function JobPage({ params }: Props) {
                                     <div>
                                         <label htmlFor="educationLevel" className="block text-sm font-semibold text-gray-900 mb-2">Education Level *</label>
                                         <select id="educationLevel" name="educationLevel" value={formData.educationLevel} onChange={handleInputChange}
-                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${formErrors.educationLevel ? 'border-red-300' : 'border-gray-300'}`}>
+                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 focus:border-transparent ${formErrors.educationLevel ? 'border-red-300' : 'border-gray-300'}`}>
                                             <option value="">Select education level</option>
                                             <option value="bachelors">Bachelor&apos;s Degree</option>
                                             <option value="master">Master&apos;s Degree</option>
@@ -350,7 +350,7 @@ export default function JobPage({ params }: Props) {
                                         <label htmlFor="yearsOfExperience" className="block text-sm font-semibold text-gray-900 mb-2">Years of Experience in Relevant Field *</label>
                                         <input type="number" id="yearsOfExperience" name="yearsOfExperience" value={formData.yearsOfExperience} onChange={handleInputChange}
                                             min="0" step="0.5"
-                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${formErrors.yearsOfExperience ? 'border-red-300' : 'border-gray-300'}`}
+                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 focus:border-transparent ${formErrors.yearsOfExperience ? 'border-red-300' : 'border-gray-300'}`}
                                             placeholder="Enter years of experience" />
                                         {formErrors.yearsOfExperience && <p className="mt-1 text-sm text-red-600">{formErrors.yearsOfExperience}</p>}
                                     </div>
@@ -359,7 +359,7 @@ export default function JobPage({ params }: Props) {
                                     <div>
                                         <label htmlFor="coverLetter" className="block text-sm font-semibold text-gray-900 mb-2">Cover Letter *</label>
                                         <textarea id="coverLetter" name="coverLetter" value={formData.coverLetter} onChange={handleInputChange} rows={6}
-                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none ${formErrors.coverLetter ? 'border-red-300' : 'border-gray-300'}`}
+                                            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 focus:border-transparent resize-none ${formErrors.coverLetter ? 'border-red-300' : 'border-gray-300'}`}
                                             placeholder="Write your cover letter here..." />
                                         {formErrors.coverLetter && <p className="mt-1 text-sm text-red-600">{formErrors.coverLetter}</p>}
                                     </div>

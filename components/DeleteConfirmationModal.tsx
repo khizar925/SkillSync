@@ -56,12 +56,12 @@ export function DeleteConfirmationModal({
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative z-[1000] w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden"
+                className="relative z-[1000] w-full max-w-md bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
             >
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                    className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600"
                 >
                     <X className="h-5 w-5" />
                 </button>
@@ -72,7 +72,7 @@ export function DeleteConfirmationModal({
                         <div className="p-4 bg-red-50 text-red-600 rounded-2xl mb-4 ring-8 ring-red-50/50">
                             <Trash2 className="h-8 w-8 text-red-600" />
                         </div>
-                        <h2 className="text-2xl font-bold text-slate-900 font-serif tracking-tight">
+                        <h2 className="text-2xl font-bold text-gray-900 font-serif tracking-tight">
                             {title}
                         </h2>
                     </div>
@@ -106,7 +106,7 @@ export function DeleteConfirmationModal({
                             variant="secondary"
                             onClick={onClose}
                             disabled={isDeleting}
-                            className="w-full h-12 font-bold hover:bg-slate-100 active:scale-95 transition-all text-slate-600"
+                            className="w-full h-12 font-bold hover:bg-gray-100 active:scale-95 transition-all text-gray-600"
                         >
                             Cancel
                         </Button>
@@ -114,8 +114,8 @@ export function DeleteConfirmationModal({
                 </div>
 
                 {/* Bottom branding or subtle text */}
-                <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-center italic">
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-center italic">
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
                         This operation is irreversible
                     </p>
                 </div>
